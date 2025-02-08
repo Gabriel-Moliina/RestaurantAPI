@@ -3,6 +3,7 @@ using RestaurantAPI.IoC;
 using RestaurantAPI.Infra.Context;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using RestaurantAPI.Domain.Interface.Token;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,7 @@ builder.Services.AddDbContext<EntityContext>(opt =>
     opt.UseMySql(connection, ServerVersion.AutoDetect(connection));
 });
 
+builder.Services.AddHttpContextAccessor();
 builder.Services.RegistryDependency(builder.Configuration);
 
 builder.Services.AddSwaggerGen(c =>

@@ -42,7 +42,8 @@ namespace RestaurantAPI.Service.Services
             if (_notification.HasNotifications) return null;
 
             var user = _mapper.Map<User>(dto);
-            return _mapper.Map<UserCreateResponseDTO>(await _userRepository.Create(user));
+            user.Password = dto.Password.Crypt();
+            return _mapper.Map<UserCreateResponseDTO>(await _userRepository.Add(user));
         }
 
         public async Task<UserLoginResponseDTO> Login(UserLoginDTO dto)

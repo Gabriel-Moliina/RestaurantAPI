@@ -16,38 +16,38 @@ namespace RestaurantAPI.Infra.Repository.Base
             _dbSet = context.Set<TEntity>();
         }
 
-        public async Task<List<TEntity>> Get() => await _dbSet.ToListAsync();
+        public virtual async Task<List<TEntity>> Get() => await _dbSet.ToListAsync();
 
-        public async Task<TEntity> GetById(long id) => await _dbSet.FirstOrDefaultAsync(e => e.Id == id);
-        public async Task<TEntity> Add(TEntity entity)
+        public virtual async Task<TEntity> GetById(long id) => await _dbSet.FirstOrDefaultAsync(e => e.Id == id);
+        public virtual async Task<TEntity> Add(TEntity entity)
         {
             var savedEntity = await _dbSet.AddAsync(entity);
             await _context.SaveChangesAsync();
             return savedEntity.Entity;
         }
 
-        public async Task<TEntity> Update(TEntity entity)
+        public virtual async Task<TEntity> Update(TEntity entity)
         {
             var savedEntity = _dbSet.Update(entity);
             await _context.SaveChangesAsync();
             return savedEntity.Entity;
         }
 
-        public async Task Delete(TEntity entity)
+        public virtual async Task Delete(TEntity entity)
         {
             _dbSet.Remove(entity);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> DeleteById(long id)
+        public virtual async Task<TEntity> DeleteById(long id)
         {
             TEntity entity = await _dbSet.FirstOrDefaultAsync(e => e.Id == id);
             if (entity == null)
-                return false;
+                return entity;
 
             _dbSet.Remove(entity);
             await _context.SaveChangesAsync();
-            return true;
+            return entity;
         }
     }
 }

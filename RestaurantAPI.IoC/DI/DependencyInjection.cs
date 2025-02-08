@@ -5,6 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using RestaurantAPI.Application.Application;
+using RestaurantAPI.Domain.DTO.Restaurant;
+using RestaurantAPI.Domain.DTO.Table;
 using RestaurantAPI.Domain.DTO.User;
 using RestaurantAPI.Domain.Interface.Application;
 using RestaurantAPI.Domain.Interface.Notification;
@@ -13,6 +15,8 @@ using RestaurantAPI.Domain.Interface.Services;
 using RestaurantAPI.Domain.Interface.Token;
 using RestaurantAPI.Domain.Mapper;
 using RestaurantAPI.Domain.Notification;
+using RestaurantAPI.Domain.Validator.Restaurant;
+using RestaurantAPI.Domain.Validator.Table;
 using RestaurantAPI.Domain.Validator.User;
 using RestaurantAPI.Infra.Repository;
 using RestaurantAPI.Infra.Security.Token;
@@ -35,23 +39,34 @@ namespace RestaurantAPI.IoC
 
         private static IServiceCollection AddRepository(this IServiceCollection services)
         {
-            return services.AddScoped<IUserRepository, UserRepository>();
+            return services.AddScoped<IUserRepository, UserRepository>()
+                .AddScoped<IRestaurantRepository, RestaurantRepository>()
+                .AddScoped<ITableRepository, TableRepository>();
+                //.AddScoped<IReservationRepository, ReservationRepository>();
         }
 
         private static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            return services.AddScoped<IUserApplication, UserApplication>();
+            return services.AddScoped<IUserApplication, UserApplication>()
+                .AddScoped<IRestaurantApplication, RestaurantApplication>()
+                .AddScoped<ITableApplication, TableApplication>();
+                //.AddScoped<IReservationApplication, ReservationApplication>();
         }
 
         private static IServiceCollection AddServices(this IServiceCollection services)
         {
-            return services.AddScoped<IUserService, UserService>();
+            return services.AddScoped<IUserService, UserService>()
+                .AddScoped<IRestaurantService, RestaurantService>()
+                .AddScoped<ITableService, TableService>();
+                //.AddScoped<IReservationService, ReservationService>();
         }
 
         private static IServiceCollection AddValidators(this IServiceCollection services)
         {
             services.AddScoped<IValidator<UserCreateDTO>, UserCreateValidator>();
             services.AddScoped<IValidator<UserLoginDTO>, UserLoginValidator>();
+            services.AddScoped<IValidator<RestaurantCreateDTO>, RestaurantCreateValidator>();
+            services.AddScoped<IValidator<TableDTO>, TableCreateValidator>();
             return services;
         }
 
@@ -63,6 +78,8 @@ namespace RestaurantAPI.IoC
         private static IServiceCollection AddAutoMapper(this IServiceCollection services)
         {
             services.AddAutoMapper(typeof(UserMapper));
+            services.AddAutoMapper(typeof(RestaurantMapper));
+            services.AddAutoMapper(typeof(TableMapper));
             return services;
         }
 

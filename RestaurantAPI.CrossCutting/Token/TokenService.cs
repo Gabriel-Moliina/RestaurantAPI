@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using RestaurantAPI.Domain.DTO.Token;
@@ -12,8 +13,11 @@ namespace RestaurantAPI.Infra.Security.Token
     public class TokenService : ITokenService
     {
         private readonly JwtSettings _jwtSettings;
-        public TokenService(IConfiguration configuration)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public TokenService(IConfiguration configuration,
+            IHttpContextAccessor httpContextAccessor)
         {
+            _httpContextAccessor = httpContextAccessor;
             _jwtSettings = new JwtSettings
             {
                 SecretKey = configuration["JwtSettings:SecretKey"],
@@ -42,6 +46,18 @@ namespace RestaurantAPI.Infra.Security.Token
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+
+        public UserDTO GetUser()
+        {
+            var user = _httpContextAccessor.HttpContext.User;
+
+            return new UserDTO
+            {
+                Id = int.Parse(user.FindFirst(ClaimTypes.NameIdentifier)?.Value),
+                Name = user.FindFirst(ClaimTypes.Name)?.Value,
+                Email = user.FindFirst(ClaimTypes.Email)?.Value
+            };
         }
     }
 }

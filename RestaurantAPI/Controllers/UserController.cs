@@ -37,8 +37,8 @@ namespace RestaurantAPI.Controllers
             return Execute(async () => await _userApplication.Login(user));
         }
 
-        [HttpPost("CreateUser")]
-        public Task<ActionResult<ResponseApiViewModel<UserCreateResponseDTO>>> CreateUser([FromBody] UserCreateDTO user)
+        [HttpPost("Create")]
+        public Task<ActionResult<ResponseApiViewModel<UserCreateResponseDTO>>> Create([FromBody] UserCreateDTO user)
         {
             return Execute(async () => await _userApplication.Create(user));
         }
