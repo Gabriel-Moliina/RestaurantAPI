@@ -1,16 +1,21 @@
-﻿using FluentValidation;
+﻿using System.Text;
+using FluentValidation;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using RestaurantAPI.Application.Application;
 using RestaurantAPI.Domain.DTO.User;
 using RestaurantAPI.Domain.Interface.Application;
 using RestaurantAPI.Domain.Interface.Notification;
 using RestaurantAPI.Domain.Interface.Repository;
 using RestaurantAPI.Domain.Interface.Services;
+using RestaurantAPI.Domain.Interface.Token;
 using RestaurantAPI.Domain.Mapper;
 using RestaurantAPI.Domain.Notification;
 using RestaurantAPI.Domain.Validator.User;
 using RestaurantAPI.Infra.Repository;
+using RestaurantAPI.Infra.Security.Token;
 using RestaurantAPI.Service.Services;
 
 namespace RestaurantAPI.IoC
@@ -22,6 +27,7 @@ namespace RestaurantAPI.IoC
             services.AddValidators()
                 .AddNotifications()
                 .AddAutoMapper()
+                .AddAuthentication(configuration)
                 .AddApplication()
                 .AddServices()
                 .AddRepository();
@@ -45,6 +51,7 @@ namespace RestaurantAPI.IoC
         private static IServiceCollection AddValidators(this IServiceCollection services)
         {
             services.AddScoped<IValidator<UserCreateDTO>, UserCreateValidator>();
+            services.AddScoped<IValidator<UserLoginDTO>, UserLoginValidator>();
             return services;
         }
 
@@ -56,6 +63,32 @@ namespace RestaurantAPI.IoC
         private static IServiceCollection AddAutoMapper(this IServiceCollection services)
         {
             services.AddAutoMapper(typeof(UserMapper));
+            return services;
+        }
+
+        public static IServiceCollection AddAuthentication(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddSingleton<ITokenService, TokenService>();
+
+            var key = Encoding.ASCII.GetBytes(configuration["JwtSettings:SecretKey"]);
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(x =>
+                {
+                    x.RequireHttpsMetadata = false;
+                    x.SaveToken = true;
+                    x.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
+
             return services;
         }
     }

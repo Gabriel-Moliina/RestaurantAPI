@@ -23,5 +23,7 @@ namespace RestaurantAPI.Application.Application
             transactionScope.Complete();
             return response;
         }
+
+        public async Task<UserLoginResponseDTO> Login(UserLoginDTO dto) => await _userService.Login(dto);
     }
 }

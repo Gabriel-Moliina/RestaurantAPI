@@ -13,6 +13,7 @@ namespace RestaurantAPI.Domain.Mapper
             CreateMap<User, UserDTO>();
             CreateMap<User, UserCreateDTO>();
             CreateMap<User, List<UserDTO>>();
+            CreateMap<User, UserLoginResponseDTO>();
         }
     }
 }
