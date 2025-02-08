@@ -1,6 +1,8 @@
 ﻿using System.Transactions;
+using RestaurantAPI.Domain.DTO.Messaging;
 using RestaurantAPI.Domain.DTO.Table;
 using RestaurantAPI.Domain.Interface.Application;
+using RestaurantAPI.Domain.Interface.Messaging;
 using RestaurantAPI.Domain.Interface.Services;
 using RestaurantAPI.Domain.ValueObjects.Table;
 
@@ -9,9 +11,12 @@ namespace RestaurantAPI.Application.Application
     public class TableApplication : ITableApplication
     {
         private readonly ITableService _tableService;
-        public TableApplication(ITableService tableService)
+        private readonly IRabbitMQSender _rabbitMQSender;
+        public TableApplication(ITableService tableService,
+            IRabbitMQSender rabbitMQSender)
         {
             _tableService = tableService;
+            _rabbitMQSender = rabbitMQSender;
         }
 
         public async Task<TableDTO> GetById(long id) => await _tableService.GetById(id);
@@ -29,6 +34,15 @@ namespace RestaurantAPI.Application.Application
             using TransactionScope transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             bool response = await _tableService.ChangeStatus(dto);
             transactionScope.Complete();
+
+            _rabbitMQSender.SendMessage(new ReserveTableMessage()
+            {
+                Email = "teste,com",
+                CreatedAt = DateTime.UtcNow,
+                Date = DateTime.UtcNow.AddDays(1),
+                Id = dto.TableId
+            }, "queuetablemessages");
+
             return response;
         }
     }

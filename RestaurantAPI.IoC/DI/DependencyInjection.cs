@@ -9,6 +9,7 @@ using RestaurantAPI.Domain.DTO.Restaurant;
 using RestaurantAPI.Domain.DTO.Table;
 using RestaurantAPI.Domain.DTO.User;
 using RestaurantAPI.Domain.Interface.Application;
+using RestaurantAPI.Domain.Interface.Messaging;
 using RestaurantAPI.Domain.Interface.Notification;
 using RestaurantAPI.Domain.Interface.Repository;
 using RestaurantAPI.Domain.Interface.Services;
@@ -20,6 +21,7 @@ using RestaurantAPI.Domain.Validator.Table;
 using RestaurantAPI.Domain.Validator.User;
 using RestaurantAPI.Infra.Repository;
 using RestaurantAPI.Infra.Security.Token;
+using RestaurantAPI.Messaging.Sender;
 using RestaurantAPI.Service.Services;
 
 namespace RestaurantAPI.IoC
@@ -34,6 +36,7 @@ namespace RestaurantAPI.IoC
                 .AddAuthentication(configuration)
                 .AddApplication()
                 .AddServices()
+                .AddMessagingRabbitMQ(configuration)
                 .AddRepository();
         }
 
@@ -106,6 +109,12 @@ namespace RestaurantAPI.IoC
                     };
                 });
 
+            return services;
+        }
+
+        private static IServiceCollection AddMessagingRabbitMQ(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddTransient<IRabbitMQSender, RabbitMQSender>();
             return services;
         }
     }

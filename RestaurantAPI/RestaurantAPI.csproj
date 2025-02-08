@@ -20,4 +20,8 @@
     <ProjectReference Include="..\RestaurantAPI.IoC\RestaurantAPI.IoC.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="BackgroudServices\" />
+  </ItemGroup>
+
 </Project>
