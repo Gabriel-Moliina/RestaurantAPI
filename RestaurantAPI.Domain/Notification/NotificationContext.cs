@@ -34,7 +34,7 @@ namespace RestaurantAPI.Domain.Notification
         {
             foreach (var error in validationResult.Errors)
             {
-                AddNotification(error.ErrorCode, error.ErrorMessage);
+                AddNotification(error.PropertyName, error.ErrorMessage);
             }
         }
     }

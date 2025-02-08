@@ -17,6 +17,7 @@ namespace RestaurantAPI.Domain.Validator.User
 
             RuleFor(a => a.Email)
                 .EmailAddress()
+                .WithMessage("Invalid Email!")
                 .NotEmpty()
                 .WithMessage("Invalid Email!");
 

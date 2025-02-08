@@ -19,7 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "05.API", "05.API", "{C64E60
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantAPI.Service", "RestaurantAPI.Service\RestaurantAPI.Service.csproj", "{A54134E5-BBF8-427E-89BA-4540785AE47D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantAPI.CrossCutting", "RestaurantAPI.CrossCutting\RestaurantAPI.CrossCutting.csproj", "{A69C59B7-8E5D-4EC1-959A-89D5DAA1CE68}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantAPI.Infra.CrossCutting", "RestaurantAPI.CrossCutting\RestaurantAPI.Infra.CrossCutting.csproj", "{A69C59B7-8E5D-4EC1-959A-89D5DAA1CE68}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "04.Application", "04.Application", "{9CE99E86-10FC-4D94-A82D-4D4E60AAED01}"
 EndProject

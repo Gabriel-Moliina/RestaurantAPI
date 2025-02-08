@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\RestaurantAPI.Infra\RestaurantAPI.Infra.csproj" />
+    <ProjectReference Include="..\RestaurantAPI.IoC\RestaurantAPI.IoC.csproj" />
   </ItemGroup>
 
 </Project>

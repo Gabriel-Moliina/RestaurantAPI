@@ -10,6 +10,9 @@ namespace RestaurantAPI.Domain.Mapper
         {
             CreateMap<UserCreateDTO, User>();
             CreateMap<User, UserCreateResponseDTO>();
+            CreateMap<User, UserDTO>();
+            CreateMap<User, UserCreateDTO>();
+            CreateMap<User, List<UserDTO>>();
         }
     }
 }

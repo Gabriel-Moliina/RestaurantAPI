@@ -24,13 +24,17 @@ namespace RestaurantAPI.Service.Services
             _validatorUserCreate = validatorUserCreate;
         }
 
+        public async Task<List<UserDTO>> Get() => _mapper.Map<List<UserDTO>>(await _userRepository.Get());
+
+        public async Task<UserDTO> GetById(long id) => _mapper.Map<UserDTO>(await _userRepository.GetById(id));
+
         public async Task<UserCreateResponseDTO> Create(UserCreateDTO dto)
         {
             _notification.AddNotifications(await _validatorUserCreate.ValidateAsync(dto));
             if (_notification.HasNotifications) return null;
 
             var user = _mapper.Map<User>(dto);
-            return _mapper.Map<UserCreateResponseDTO>(_userRepository.Create(user));
+            return _mapper.Map<UserCreateResponseDTO>(await _userRepository.Create(user));
         }
     }
 }

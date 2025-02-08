@@ -13,6 +13,9 @@ namespace RestaurantAPI.Application.Application
             _userService = userService;
         }
 
+        public async Task<List<UserDTO>> Get() => await _userService.Get();
+        public async Task<UserDTO> GetById(long id) => await _userService.GetById(id);
+
         public async Task<UserCreateResponseDTO> Create(UserCreateDTO dto)
         {
             using TransactionScope transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);

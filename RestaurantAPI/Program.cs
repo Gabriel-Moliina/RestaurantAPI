@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using RestaurantAPI.IoC;
 using RestaurantAPI.Infra.Context;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,8 @@ builder.Services.AddDbContext<EntityContext>(opt =>
     string connection = builder.Configuration.GetConnectionString("MySQL");
     opt.UseMySql(connection, ServerVersion.AutoDetect(connection));
 });
+
+builder.Services.RegistryDependency(builder.Configuration);
 
 var app = builder.Build();
 

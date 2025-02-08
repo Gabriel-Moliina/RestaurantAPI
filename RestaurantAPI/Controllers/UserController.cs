@@ -4,14 +4,12 @@ using RestaurantAPI.Controllers.Base;
 using RestaurantAPI.Domain.DTO.User;
 using RestaurantAPI.Domain.Interface.Application;
 using RestaurantAPI.Domain.Interface.Notification;
-using RestaurantAPI.Domain.Interface.Services;
 using RestaurantAPI.ViewModels;
 
 namespace RestaurantAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [AllowAnonymous]
     public class UserController : BaseController
     {
         private readonly IUserApplication _userApplication;
@@ -21,6 +19,19 @@ namespace RestaurantAPI.Controllers
             _userApplication = userApplication;
         }
 
+        [HttpGet]
+        public Task<ActionResult<ResponseApiViewModel<List<UserDTO>>>> Get()
+        {
+            return Execute(async () => await _userApplication.Get());
+        }
+
+        [HttpGet("{id}")]
+        public Task<ActionResult<ResponseApiViewModel<UserDTO>>> GetById(long id)
+        {
+            return Execute(async () => await _userApplication.GetById(id));
+        }
+
+        [HttpPost]
         public Task<ActionResult<ResponseApiViewModel<UserCreateResponseDTO>>> CreateUser([FromBody] UserCreateDTO user)
         {
             return Execute(async () => await _userApplication.Create(user));
