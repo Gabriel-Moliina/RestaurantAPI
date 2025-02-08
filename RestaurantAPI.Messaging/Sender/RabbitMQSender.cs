@@ -11,13 +11,9 @@ namespace RestaurantAPI.Messaging.Sender
     public class RabbitMQSender : IRabbitMQSender
     {
         private RabbitMQSettings _rabbitMQSettings;
-        public RabbitMQSender(IConfiguration configuration)
+        public RabbitMQSender(IConfiguration configuration, RabbitMQSettings rabbitMQSettings)
         {
-            var rabbitMQSettings = configuration.GetSection("RabbitMQSettings");
-
-            _rabbitMQSettings = new RabbitMQSettings(rabbitMQSettings["HostName"],
-                rabbitMQSettings["UserName"],
-                rabbitMQSettings["Password"]);
+            _rabbitMQSettings = rabbitMQSettings;
         }
 
         public async void SendMessage(BaseMessage message, string queueName)

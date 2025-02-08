@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Configuration;
 
 namespace RestaurantAPI.Domain.DTO.Messaging
 {
     public class RabbitMQSettings
     {
-        public RabbitMQSettings(string hostName, string userName, string password)
+        public RabbitMQSettings(IConfiguration configuration)
         {
-            HostName = hostName;
-            UserName = userName;
-            Password = password;
+            HostName = configuration["RabbitMQSettings:HostName"];
+            UserName = configuration["RabbitMQSettings:UserName"];
+            Password = configuration["RabbitMQSettings:Password"];
 
         }
         public string HostName { get; set; }

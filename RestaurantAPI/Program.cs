@@ -4,6 +4,7 @@ using RestaurantAPI.Infra.Context;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using RestaurantAPI.Domain.Interface.Token;
+using RestaurantAPI.BackgroudServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,7 @@ builder.Services.AddDbContext<EntityContext>(opt =>
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.RegistryDependency(builder.Configuration);
+builder.Services.AddHostedService<ReserveTableRabbitMQConsumer>();
 
 builder.Services.AddSwaggerGen(c =>
 {

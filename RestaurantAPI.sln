@@ -25,11 +25,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "04.Application", "04.Applic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantAPI.Application", "RestaurantAPI.Application\RestaurantAPI.Application.csproj", "{62B7D246-6318-4659-B75E-8F317953BB0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantAPI.IoC", "RestaurantAPI.IoC\RestaurantAPI.IoC.csproj", "{2FB83570-F5FF-4BB7-81D7-539B44BCEB68}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantAPI.Infra.IoC", "RestaurantAPI.IoC\RestaurantAPI.Infra.IoC.csproj", "{2FB83570-F5FF-4BB7-81D7-539B44BCEB68}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantAPI.Messaging", "RestaurantAPI.Messaging\RestaurantAPI.Messaging.csproj", "{5238B040-0EC0-4E3C-AA74-ED740307D3BC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantAPI.Infra.Messaging", "RestaurantAPI.Messaging\RestaurantAPI.Infra.Messaging.csproj", "{5238B040-0EC0-4E3C-AA74-ED740307D3BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantAPI.Email", "RestaurantAPI.Email\RestaurantAPI.Email.csproj", "{2A536A68-239F-46C1-B07E-9589C3DE740A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantAPI.Infra.Email", "RestaurantAPI.Email\RestaurantAPI.Infra.Email.csproj", "{2A536A68-239F-46C1-B07E-9589C3DE740A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

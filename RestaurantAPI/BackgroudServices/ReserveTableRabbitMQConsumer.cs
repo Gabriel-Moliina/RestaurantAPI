@@ -1,25 +1,22 @@
 ﻿using System.Text;
 using System.Text.Json;
-using Microsoft.EntityFrameworkCore.Metadata;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RestaurantAPI.Domain.DTO.Messaging;
-using RestaurantAPI.Domain.Entities;
-using RestaurantAPI.Domain.Interface.Messaging;
-using RestaurantAPI.Domain.Interface.Repository;
 using RestaurantAPI.Domain.Interface.Services;
+using RestaurantAPI.Email.Sender;
 
 namespace RestaurantAPI.BackgroudServices
 {
     public class ReserveTableRabbitMQConsumer : BackgroundService
     {
         private readonly RabbitMQSettings _rabbitMQSettings;
-        private readonly IReservationService _reservationService;
+        private readonly EmailSender _emailSender;
         public ReserveTableRabbitMQConsumer(RabbitMQSettings rabbitMQSettings,
-            IReservationService reservationService)
+            EmailSender emailSender)
         {
             _rabbitMQSettings = rabbitMQSettings;
-            _reservationService = reservationService;
+            _emailSender = emailSender;
         }
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
@@ -31,7 +28,6 @@ namespace RestaurantAPI.BackgroudServices
             };
 
             var connection = await factory.CreateConnectionAsync();
-
             var channel = await connection.CreateChannelAsync();
             await channel.QueueDeclareAsync(queue: "queue_table_reservation", false, false, false, arguments: null);
 
@@ -41,9 +37,15 @@ namespace RestaurantAPI.BackgroudServices
             {
                 var content = Encoding.UTF8.GetString(evt.Body.ToArray());
                 ReserveTableMessage reserveTableMessage = JsonSerializer.Deserialize<ReserveTableMessage>(content);
-                await _reservationService.CreateReserve(reserveTableMessage);
+                await CreateReserve(reserveTableMessage);
             };
             await channel.BasicConsumeAsync("queue_table_reservation", true, consumer);
+        }
+
+        public Task CreateReserve(ReserveTableMessage reserveMessage)
+        {
+            _emailSender.SendEmail(reserveMessage.Email, "teste", "teste");
+            return Task.CompletedTask;
         }
     }
 }

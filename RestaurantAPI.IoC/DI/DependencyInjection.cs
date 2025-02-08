@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using RestaurantAPI.Application.Application;
+using RestaurantAPI.Domain.DTO.Messaging;
 using RestaurantAPI.Domain.DTO.Restaurant;
 using RestaurantAPI.Domain.DTO.Table;
 using RestaurantAPI.Domain.DTO.User;
@@ -19,6 +20,7 @@ using RestaurantAPI.Domain.Notification;
 using RestaurantAPI.Domain.Validator.Restaurant;
 using RestaurantAPI.Domain.Validator.Table;
 using RestaurantAPI.Domain.Validator.User;
+using RestaurantAPI.Email.Sender;
 using RestaurantAPI.Infra.Repository;
 using RestaurantAPI.Infra.Security.Token;
 using RestaurantAPI.Messaging.Sender;
@@ -60,8 +62,8 @@ namespace RestaurantAPI.IoC
         {
             return services.AddScoped<IUserService, UserService>()
                 .AddScoped<IRestaurantService, RestaurantService>()
-                .AddScoped<ITableService, TableService>();
-                //.AddScoped<IReservationService, ReservationService>();
+                .AddScoped<ITableService, TableService>()
+                .AddScoped<IReservationService, ReservationService>();
         }
 
         private static IServiceCollection AddValidators(this IServiceCollection services)
@@ -114,6 +116,8 @@ namespace RestaurantAPI.IoC
 
         private static IServiceCollection AddMessagingRabbitMQ(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddSingleton<EmailSender>();
+            services.AddSingleton<RabbitMQSettings>();
             services.AddTransient<IRabbitMQSender, RabbitMQSender>();
             return services;
         }
