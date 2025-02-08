@@ -2,7 +2,7 @@
 
 namespace RestaurantAPI.Domain.Interface.Repository.Base
 {
-    public interface IRepositoryBase<TEntity> where TEntity : BaseEntity
+    public interface IBaseRepository<TEntity> where TEntity : BaseEntity
     {
         Task<List<TEntity>> Get();
         Task<TEntity> GetById(long id);

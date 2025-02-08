@@ -3,7 +3,7 @@ using RestaurantAPI.Domain.Interface.Repository.Base;
 
 namespace RestaurantAPI.Domain.Interface.Repository
 {
-    public interface IRepositoryUser : IRepositoryBase<User>
+    public interface IReservationRepository : IBaseRepository<Reservation>
     {
     }
 }

@@ -22,6 +22,7 @@
   </ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\RestaurantAPI.CrossCutting\RestaurantAPI.CrossCutting.csproj" />
 		<ProjectReference Include="..\RestaurantAPI.Domain\RestaurantAPI.Domain.csproj" />
 	</ItemGroup>
 

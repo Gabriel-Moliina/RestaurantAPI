@@ -1,18 +1,13 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>disable</Nullable>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="13.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\RestaurantAPI.Domain\RestaurantAPI.Domain.csproj" />
-    <ProjectReference Include="..\RestaurantAPI.Infra\RestaurantAPI.Infra.csproj" />
   </ItemGroup>
 
 </Project>

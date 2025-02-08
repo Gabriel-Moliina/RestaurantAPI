@@ -5,12 +5,12 @@ using RestaurantAPI.Infra.Context;
 
 namespace RestaurantAPI.Infra.Repository.Base
 {
-    public abstract class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : BaseEntity
+    public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : BaseEntity
     {
         protected EntityContext _context;
         protected DbSet<TEntity> _dbSet;
 
-        public RepositoryBase(EntityContext context)
+        public BaseRepository(EntityContext context)
         {
             _context = context;
             _dbSet = context.Set<TEntity>();
