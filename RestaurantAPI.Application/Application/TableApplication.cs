@@ -41,7 +41,7 @@ namespace RestaurantAPI.Application.Application
                 CreatedAt = DateTime.UtcNow,
                 Date = DateTime.UtcNow.AddDays(1),
                 Id = dto.TableId
-            }, "queuetablemessages");
+            }, "queue_table_reservation");
 
             return response;
         }

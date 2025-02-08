@@ -12,16 +12,13 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="RabbitMQ.Client" Version="7.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\RestaurantAPI.Infra\RestaurantAPI.Infra.csproj" />
     <ProjectReference Include="..\RestaurantAPI.IoC\RestaurantAPI.IoC.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="BackgroudServices\" />
   </ItemGroup>
 
 </Project>
