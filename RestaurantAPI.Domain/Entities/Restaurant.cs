@@ -2,7 +2,7 @@
 
 namespace RestaurantAPI.Domain.Entities
 {
-    public class Restaurant : BaseEntity<long>
+    public class Restaurant : BaseEntity
     {
         public Restaurant()
         {

@@ -25,10 +25,13 @@ namespace RestaurantAPI.Infra.Mapping
                 .HasColumnType("tinyint(1)")
                 .HasColumnName(nameof(Table.Free).ToLower());
 
+            builder.Property(p => p.RestaurantId)
+                .HasColumnType("bigint")
+                .HasColumnName(nameof(Table.Restaurant).ToLower() + "_id");
+
             builder.HasOne(r => r.Restaurant)
                 .WithMany(e => e.Tables)
-                .HasForeignKey(e => e.RestaurantId)
-                .HasConstraintName(nameof(Restaurant).ToLower() + "_id");
+                .HasForeignKey(e => e.RestaurantId);
         }
     }
 }

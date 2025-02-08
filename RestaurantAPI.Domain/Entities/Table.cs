@@ -2,7 +2,7 @@
 
 namespace RestaurantAPI.Domain.Entities
 {
-    public class Table : BaseEntity<long>
+    public class Table : BaseEntity
     {
         public string Identification { get; set; }
         public int Capacity { get; set; }

@@ -17,10 +17,17 @@ namespace RestaurantAPI.Infra.Mapping
                 .HasColumnType("varchar(255)")
                 .HasColumnName(nameof(Reservation.Email).ToLower());
 
+            builder.Property(p => p.Date)
+                .HasColumnType("datetime")
+                .HasColumnName(nameof(Reservation.Date).ToLower());
+
+            builder.Property(p => p.TableId)
+                .HasColumnType("bigint")
+                .HasColumnName(nameof(Reservation.Table).ToLower() + "_id");
+
             builder.HasOne(r => r.Table)
                 .WithOne(e => e.Reservation)
-                .HasForeignKey<Reservation>(e => e.TableId)
-                .HasConstraintName(nameof(Table).ToLower() + "_id");
+                .HasForeignKey<Reservation>(e => e.TableId);
         }
     }
 }

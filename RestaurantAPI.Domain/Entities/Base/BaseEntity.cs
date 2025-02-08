@@ -1,7 +1,7 @@
 ﻿namespace RestaurantAPI.Domain.Entities.Base
 {
-    public abstract class BaseEntity<TIdType>
+    public abstract class BaseEntity
     {
-        public TIdType Id {get;set;}
+        public long Id {get;set;}
     }
 }

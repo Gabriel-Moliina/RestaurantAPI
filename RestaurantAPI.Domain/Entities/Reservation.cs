@@ -2,7 +2,7 @@
 
 namespace RestaurantAPI.Domain.Entities
 {
-    public class Reservation : BaseEntity<long>
+    public class Reservation : BaseEntity
     {
         public string Email { get; set; }
         public DateTime Date { get; set; }

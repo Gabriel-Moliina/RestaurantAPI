@@ -25,7 +25,9 @@ namespace RestaurantAPI.Infra.Mapping
                 .HasColumnType("bigint")
                 .HasColumnName(nameof(Restaurant.User).ToLower() + "_id");
 
-            //builder.HasOne( )
+            builder.HasOne(r => r.User)
+                .WithMany(e => e.Restaurants)
+                .HasForeignKey(e => e.UserId);
         }
     }
 }
