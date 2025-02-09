@@ -18,9 +18,7 @@ namespace RestaurantAPI.Domain.Validator.User
 
             RuleFor(a => a.Email)
                 .EmailAddress()
-                .WithMessage("Invalid Email!")
-                .NotEmpty()
-                .WithMessage("Invalid Email!");
+                .WithMessage("Email inválido!");
 
             RuleFor(a => a.Email)
                 .MustAsync(async (email, cancellation) =>
@@ -28,7 +26,7 @@ namespace RestaurantAPI.Domain.Validator.User
                     bool exists = await _userRepository.Exists(email);
                     return exists;
                 })
-                .WithMessage("User not found!");
+                .WithMessage("Usuário não encontrado!");
 
             RuleFor(a => a.Password)
                 .NotEmpty()

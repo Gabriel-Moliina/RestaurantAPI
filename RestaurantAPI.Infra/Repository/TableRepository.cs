@@ -12,6 +12,10 @@ namespace RestaurantAPI.Infra.Repository
         {
         }
 
-        public async Task<bool> Exists(string identification, long restaurantId) => await _dbSet.AnyAsync(e => e.Identification == identification && e.RestaurantId == restaurantId);
+        public override async Task<Table> GetById(long id) =>
+            await _dbSet.Where(e => e.Id == id).Include(e => e.Restaurant).FirstOrDefaultAsync();
+
+        public async Task<bool> Exists(string identification, long restaurantId) =>
+            await _dbSet.AnyAsync(e => e.Identification == identification && e.RestaurantId == restaurantId);
     }
 }

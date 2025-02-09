@@ -22,7 +22,7 @@ builder.Services.AddDbContext<EntityContext>(opt =>
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.RegistryDependency(builder.Configuration);
-builder.Services.AddHostedService<ReserveTableRabbitMQConsumer>();
+builder.Services.AddHostedService<TableReserveEmailConsumer>();
 
 builder.Services.AddSwaggerGen(c =>
 {

@@ -54,7 +54,7 @@ namespace RestaurantAPI.Service.Services
             var user = await _userRepository.Login(dto.Email, dto.Password.Crypt());
             if(user == null)
             {
-                _notification.AddNotification("User", "User not found!");
+                _notification.AddNotification("Usuário", "Usuário não encontrado!");
                 return null;
             }
 

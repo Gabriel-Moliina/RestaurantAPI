@@ -23,14 +23,14 @@ namespace RestaurantAPI.Domain.Validator.Table
                     return !await _tableRepository.Exists(obj.identification, obj.restaurantId);
                 })
                 .WithName("Table")
-                .WithMessage("Table already exists!");
+                .WithMessage("Mesa já existente!");
 
             RuleFor(a => a.RestaurantId)
                 .MustAsync(async (restaurantId, cancellationToken) =>
                 {
                     return await _restaurantRepository.GetById(restaurantId) != null;
                 })
-                .WithMessage("Restaurant not found!");
+                .WithMessage("Restaurante não encontrado!");
         }
     }
 }

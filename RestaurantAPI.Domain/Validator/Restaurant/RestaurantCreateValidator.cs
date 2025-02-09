@@ -17,7 +17,7 @@ namespace RestaurantAPI.Domain.Validator.Restaurant
 
             RuleFor(a => a.Name)
                 .NotEmpty()
-                .WithMessage("Name cannot be empty!");
+                .WithMessage("O nome deve ser preenchido!");
 
             RuleFor(a => a.Name)
                 .MustAsync(async (name, cancellationToken) =>
@@ -25,7 +25,7 @@ namespace RestaurantAPI.Domain.Validator.Restaurant
                     if (string.IsNullOrEmpty(name)) return true;
                     return !await _restaurantRepository.Exists(name, _tokenService.GetUser().Id);
                 })
-                .WithMessage("Restaurant already exists!");
+                .WithMessage("Restaurante já existente!");
         }
     }
 }

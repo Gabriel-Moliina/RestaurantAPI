@@ -38,11 +38,11 @@ namespace RestaurantAPI.Service.Services
         public async Task<bool> ChangeStatus(TableChangeStatusDTO dto)
         {
             if (!Enum.IsDefined(typeof(EnumTableStatus), dto.Status))
-                _notification.AddNotification("Status", "Status not accepted!");
+                _notification.AddNotification("Status", "Status não encontrado!");
 
             var table = await _tableRepository.GetById(dto.TableId);
             if(table == null) 
-                _notification.AddNotification("Table", "Table not found!");
+                _notification.AddNotification("Table", "Mesa não encontrada!");
 
             if (_notification.HasNotifications) return false;
 

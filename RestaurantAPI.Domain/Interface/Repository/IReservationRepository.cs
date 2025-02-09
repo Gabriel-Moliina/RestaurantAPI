@@ -5,5 +5,6 @@ namespace RestaurantAPI.Domain.Interface.Repository
 {
     public interface IReservationRepository : IBaseRepository<Reservation>
     {
+        Task<Reservation> GetByTableId(long tableId);
     }
 }

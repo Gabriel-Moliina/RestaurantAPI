@@ -39,12 +39,6 @@ namespace RestaurantAPI.Controllers
             return Execute(async () => await _tableApplication.ChangeStatus(dto));
         }
 
-        [HttpPost("Reservation")]
-        public Task<ActionResult<ResponseApiViewModel<TableResponseDTO>>> Reservation([FromBody] TableDTO table)
-        {
-            return Execute(async () => await _tableApplication.Create(table));
-        }
-
         [HttpDelete("{id}")]
         public Task<ActionResult<ResponseApiViewModel<TableDTO>>> DeleteById(long id)
         {

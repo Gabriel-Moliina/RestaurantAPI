@@ -1,8 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
+using RestaurantAPI.Domain.Interface.Messaging;
 
 namespace RestaurantAPI.Domain.DTO.Messaging
 {
-    public class RabbitMQSettings
+    public class RabbitMQSettings : IRabbitMQSettings
     {
         public RabbitMQSettings(IConfiguration configuration)
         {
@@ -11,8 +12,8 @@ namespace RestaurantAPI.Domain.DTO.Messaging
             Password = configuration["RabbitMQSettings:Password"];
 
         }
-        public string HostName { get; set; }
-        public string UserName { get; set; }
-        public string Password { get; set; }
+        public string HostName { get; }
+        public string UserName { get; }
+        public string Password { get; }
     }
 }

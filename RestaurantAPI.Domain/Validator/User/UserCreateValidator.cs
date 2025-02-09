@@ -17,16 +17,14 @@ namespace RestaurantAPI.Domain.Validator.User
 
             RuleFor(a => a.Email)
                 .EmailAddress()
-                .WithMessage("Invalid Email!")
-                .NotEmpty()
-                .WithMessage("Invalid Email!");
+                .WithMessage("Email inválido!");
 
             RuleFor(a => a.Password)
                 .NotEmpty()
                 .MinimumLength(6)
-                .WithMessage("Password must contain more than 6 digits!")
+                .WithMessage("Senha deve conter ao menos 6 dígitos")
                 .Must(ValidateUpper)
-                .WithMessage("The password must contain at least one uppercase character!");
+                .WithMessage("A senha deve conter ao menos uma letra maiúscula!");
         }
 
         public bool ValidateUpper(string value)

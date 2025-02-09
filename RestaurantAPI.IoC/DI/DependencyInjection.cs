@@ -6,10 +6,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using RestaurantAPI.Application.Application;
 using RestaurantAPI.Domain.DTO.Messaging;
+using RestaurantAPI.Domain.DTO.Reservation;
 using RestaurantAPI.Domain.DTO.Restaurant;
 using RestaurantAPI.Domain.DTO.Table;
 using RestaurantAPI.Domain.DTO.User;
 using RestaurantAPI.Domain.Interface.Application;
+using RestaurantAPI.Domain.Interface.Email;
 using RestaurantAPI.Domain.Interface.Messaging;
 using RestaurantAPI.Domain.Interface.Notification;
 using RestaurantAPI.Domain.Interface.Repository;
@@ -20,7 +22,8 @@ using RestaurantAPI.Domain.Notification;
 using RestaurantAPI.Domain.Validator.Restaurant;
 using RestaurantAPI.Domain.Validator.Table;
 using RestaurantAPI.Domain.Validator.User;
-using RestaurantAPI.Email.Sender;
+using RestaurantAPI.Infra.Email.Email;
+using RestaurantAPI.Infra.Email.Sender;
 using RestaurantAPI.Infra.Repository;
 using RestaurantAPI.Infra.Security.Token;
 using RestaurantAPI.Messaging.Sender;
@@ -46,16 +49,16 @@ namespace RestaurantAPI.IoC
         {
             return services.AddScoped<IUserRepository, UserRepository>()
                 .AddScoped<IRestaurantRepository, RestaurantRepository>()
-                .AddScoped<ITableRepository, TableRepository>();
-                //.AddScoped<IReservationRepository, ReservationRepository>();
+                .AddScoped<ITableRepository, TableRepository>()
+                .AddScoped<IReservationRepository, ReservationRepository>();
         }
 
         private static IServiceCollection AddApplication(this IServiceCollection services)
         {
             return services.AddScoped<IUserApplication, UserApplication>()
                 .AddScoped<IRestaurantApplication, RestaurantApplication>()
-                .AddScoped<ITableApplication, TableApplication>();
-                //.AddScoped<IReservationApplication, ReservationApplication>();
+                .AddScoped<ITableApplication, TableApplication>()
+                .AddScoped<IReservationApplication, ReservationApplication>();
         }
 
         private static IServiceCollection AddServices(this IServiceCollection services)
@@ -72,6 +75,7 @@ namespace RestaurantAPI.IoC
             services.AddScoped<IValidator<UserLoginDTO>, UserLoginValidator>();
             services.AddScoped<IValidator<RestaurantCreateDTO>, RestaurantCreateValidator>();
             services.AddScoped<IValidator<TableDTO>, TableCreateValidator>();
+            services.AddScoped<IValidator<TableReservationDTO>, TableReservationValidator>();
             return services;
         }
 
@@ -116,8 +120,9 @@ namespace RestaurantAPI.IoC
 
         private static IServiceCollection AddMessagingRabbitMQ(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddSingleton<EmailSender>();
-            services.AddSingleton<RabbitMQSettings>();
+            services.AddSingleton<IEmailSender, EmailSender>();
+            services.AddSingleton<IEmailSettings, EmailSettings>();
+            services.AddSingleton<IRabbitMQSettings, RabbitMQSettings>();
             services.AddTransient<IRabbitMQSender, RabbitMQSender>();
             return services;
         }

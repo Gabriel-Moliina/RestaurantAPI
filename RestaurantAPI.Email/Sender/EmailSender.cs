@@ -1,61 +1,47 @@
-﻿using System.Net.Mail;
+﻿using System.Security.Authentication;
+using MailKit.Net.Smtp;
 using Microsoft.Extensions.Configuration;
 using MimeKit;
-using RestaurantAPI.Email.Email;
-using MailKit.Net.Smtp;
+using RestaurantAPI.Domain.DTO.Messaging;
+using RestaurantAPI.Domain.Interface.Email;
 
-namespace RestaurantAPI.Email.Sender
+namespace RestaurantAPI.Infra.Email.Sender
 {
-    public class EmailSender
+    public class EmailSender : IEmailSender
     {
-        private readonly EmailSettings _emailSettings;
-        public EmailSender(IConfiguration configuration)
+        private readonly IEmailSettings _emailSettings;
+        public EmailSender(IConfiguration configuration, IEmailSettings emailSettings)
         {
-            var emailSettings = configuration.GetSection("EmailSettings");
-
-            _emailSettings = new()
-            {
-                Email = emailSettings["Email"],
-                SMTP = emailSettings["Server"],
-                Password = emailSettings["Password"],
-                Port = int.Parse(emailSettings["Port"]),
-                SSL = bool.Parse(emailSettings["SSL"])
-            };
+            _emailSettings = emailSettings;
         }
 
-
-        public void SendEmail(string receiver, string subject, string body)
+        public async Task SendEmail(EmailDTO email)
         {
             var message = new MimeMessage();
 
-            message.From.Add(new MailboxAddress(_smtpSettings.SenderName,
-                                                _smtpSettings.SenderEmail));
-            message.To.Add(new MailboxAddress("destino", email));
-            message.Subject = subject;
+            message.From.Add(new MailboxAddress("Reserva", _emailSettings.Email));
+
+            message.To.Add(MailboxAddress.Parse(email.Receiver));
+            message.Subject = email.Subject;
             message.Body = new TextPart("html")
             {
-                Text = body
+                Text = email.Message
             };
 
-            using (var client = new System.Net.Mail.SmtpClient())
+            var client = new SmtpClient()
             {
-                client.ServerCertificateValidationCallback = (s, c, h, e) => true;
+                CheckCertificateRevocation = false,
+                SslProtocols = SslProtocols.Tls | SslProtocols.Tls11 | SslProtocols.Tls12 | SslProtocols.Tls13,
+                ServerCertificateValidationCallback = (s, c, h, e) => true
+            };
 
-                if (_env.IsDevelopment())
-                {
-                    await client.ConnectAsync(_smtpSettings.Server,
-                                              _smtpSettings.Port, true);
-                }
-                else
-                {
-                    await client.ConnectAsync(_smtpSettings.Server);
-                }
+            await client.ConnectAsync(_emailSettings.SMTP,
+                                      _emailSettings.Port,
+                                      _emailSettings.SSL);
 
-                await client.AuthenticateAsync(_smtpSettings.Username,
-                                               _smtpSettings.Password);
-                await client.SendAsync(message);
-                await client.DisconnectAsync(true);
-            }
+            await client.AuthenticateAsync(_emailSettings.Email, _emailSettings.Password);
+            await client.SendAsync(message);
+            await client.DisconnectAsync(true);
         }
     }
 }

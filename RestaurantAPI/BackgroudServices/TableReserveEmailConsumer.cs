@@ -3,17 +3,17 @@ using System.Text.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RestaurantAPI.Domain.DTO.Messaging;
-using RestaurantAPI.Domain.Interface.Services;
-using RestaurantAPI.Email.Sender;
+using RestaurantAPI.Domain.Interface.Email;
+using RestaurantAPI.Domain.Interface.Messaging;
 
 namespace RestaurantAPI.BackgroudServices
 {
-    public class ReserveTableRabbitMQConsumer : BackgroundService
+    public class TableReserveEmailConsumer : BackgroundService
     {
-        private readonly RabbitMQSettings _rabbitMQSettings;
-        private readonly EmailSender _emailSender;
-        public ReserveTableRabbitMQConsumer(RabbitMQSettings rabbitMQSettings,
-            EmailSender emailSender)
+        private readonly IRabbitMQSettings _rabbitMQSettings;
+        private readonly IEmailSender _emailSender;
+        public TableReserveEmailConsumer(IRabbitMQSettings rabbitMQSettings,
+            IEmailSender emailSender)
         {
             _rabbitMQSettings = rabbitMQSettings;
             _emailSender = emailSender;
@@ -29,23 +29,17 @@ namespace RestaurantAPI.BackgroudServices
 
             var connection = await factory.CreateConnectionAsync();
             var channel = await connection.CreateChannelAsync();
-            await channel.QueueDeclareAsync(queue: "queue_table_reservation", false, false, false, arguments: null);
+            await channel.QueueDeclareAsync(queue: EmailDTO.QueueName, false, false, false, arguments: null);
 
             stoppingToken.ThrowIfCancellationRequested();
             var consumer = new AsyncEventingBasicConsumer(channel);
             consumer.ReceivedAsync += async (channel, evt) =>
             {
                 var content = Encoding.UTF8.GetString(evt.Body.ToArray());
-                ReserveTableMessage reserveTableMessage = JsonSerializer.Deserialize<ReserveTableMessage>(content);
-                await CreateReserve(reserveTableMessage);
+                EmailDTO tableReserveEmail = JsonSerializer.Deserialize<EmailDTO>(content);
+                await _emailSender.SendEmail(tableReserveEmail);
             };
-            await channel.BasicConsumeAsync("queue_table_reservation", true, consumer);
-        }
-
-        public Task CreateReserve(ReserveTableMessage reserveMessage)
-        {
-            _emailSender.SendEmail(reserveMessage.Email, "teste", "teste");
-            return Task.CompletedTask;
+            await channel.BasicConsumeAsync(EmailDTO.QueueName, true, consumer);
         }
     }
 }

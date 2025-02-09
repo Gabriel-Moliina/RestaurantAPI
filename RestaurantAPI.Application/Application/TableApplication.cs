@@ -1,10 +1,8 @@
 ﻿using System.Transactions;
-using RestaurantAPI.Domain.DTO.Messaging;
 using RestaurantAPI.Domain.DTO.Table;
 using RestaurantAPI.Domain.Interface.Application;
 using RestaurantAPI.Domain.Interface.Messaging;
 using RestaurantAPI.Domain.Interface.Services;
-using RestaurantAPI.Domain.ValueObjects.Table;
 
 namespace RestaurantAPI.Application.Application
 {
@@ -34,15 +32,6 @@ namespace RestaurantAPI.Application.Application
             using TransactionScope transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             bool response = await _tableService.ChangeStatus(dto);
             transactionScope.Complete();
-
-            _rabbitMQSender.SendMessage(new ReserveTableMessage()
-            {
-                Email = "teste,com",
-                CreatedAt = DateTime.UtcNow,
-                Date = DateTime.UtcNow.AddDays(1),
-                Id = dto.TableId
-            }, "queue_table_reservation");
-
             return response;
         }
     }

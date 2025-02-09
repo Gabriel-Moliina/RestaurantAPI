@@ -43,7 +43,7 @@ namespace RestaurantAPI.Service.Services
         {
             var response = _mapper.Map<RestaurantDTO>(await _restaurantRepository.DeleteById(id));
             if (response == null)
-                _notification.AddNotification("Restaurant", "Restaurant not found!");
+                _notification.AddNotification("Restaurante", "Restaurant não encontrado!");
             return response;
         }
     }
