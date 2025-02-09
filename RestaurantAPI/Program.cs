@@ -1,10 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using RestaurantAPI.IoC;
-using RestaurantAPI.Infra.Context;
 using Microsoft.OpenApi.Models;
-using System.Reflection;
-using RestaurantAPI.Domain.Interface.Token;
 using RestaurantAPI.BackgroudServices;
+using RestaurantAPI.Infra.Context;
+using RestaurantAPI.IoC;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +17,13 @@ builder.Services.AddDbContext<EntityContext>(opt =>
     string connection = builder.Configuration.GetConnectionString("MySQL");
     opt.UseMySql(connection, ServerVersion.AutoDetect(connection));
 });
+
+builder.Services.AddCors(options => options.AddPolicy(name: "restaurant", builder =>
+{
+    builder.AllowAnyOrigin();
+    builder.AllowAnyMethod();
+    builder.AllowAnyHeader();
+}));
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.RegistryDependency(builder.Configuration);
@@ -59,6 +64,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseCors("restaurant");
 
 app.UseAuthentication();
 

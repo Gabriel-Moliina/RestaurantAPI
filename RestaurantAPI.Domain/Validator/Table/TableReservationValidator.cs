@@ -13,7 +13,8 @@ namespace RestaurantAPI.Domain.Validator.Table
             _tableRepository = tableRepository;
 
             RuleFor(a => a.Email)
-                .EmailAddress()
+                .NotEmpty()
+                .NotNull()
                 .WithMessage("Email inválido!");
 
             RuleFor(a => a.TableId)

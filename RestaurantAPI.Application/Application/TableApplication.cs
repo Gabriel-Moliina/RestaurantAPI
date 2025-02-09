@@ -1,25 +1,35 @@
 ﻿using System.Transactions;
+using FluentValidation;
+using RestaurantAPI.Application.Application.Base;
 using RestaurantAPI.Domain.DTO.Table;
 using RestaurantAPI.Domain.Interface.Application;
-using RestaurantAPI.Domain.Interface.Messaging;
+using RestaurantAPI.Domain.Interface.Notification;
 using RestaurantAPI.Domain.Interface.Services;
 
 namespace RestaurantAPI.Application.Application
 {
-    public class TableApplication : ITableApplication
+    public class TableApplication : BaseApplication, ITableApplication
     {
+        private readonly IValidator<TableDTO> _validatorTableCreate;
+        private readonly IValidator<TableChangeStatusDTO> _validatorTableChangeStatus;
         private readonly ITableService _tableService;
-        private readonly IRabbitMQSender _rabbitMQSender;
-        public TableApplication(ITableService tableService,
-            IRabbitMQSender rabbitMQSender)
+        public TableApplication(INotification notification,
+            ITableService tableService,
+            IValidator<TableDTO> validatorTableCreate,
+            IValidator<TableChangeStatusDTO> validatorTableChangeStatus
+            ) : base(notification)
         {
             _tableService = tableService;
-            _rabbitMQSender = rabbitMQSender;
+            _validatorTableCreate = validatorTableCreate;
+            _validatorTableChangeStatus = validatorTableChangeStatus;
         }
 
         public async Task<TableDTO> GetById(long id) => await _tableService.GetById(id);
         public async Task<TableResponseDTO> Create(TableDTO dto)
         {
+            _notification.AddNotifications(await _validatorTableCreate.ValidateAsync(dto));
+            if (_notification.HasNotifications) return null;
+
             using TransactionScope transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             var response = await _tableService.Create(dto);
             transactionScope.Complete();
@@ -29,6 +39,9 @@ namespace RestaurantAPI.Application.Application
 
         public async Task<bool> ChangeStatus(TableChangeStatusDTO dto)
         {
+            _notification.AddNotifications(await _validatorTableChangeStatus.ValidateAsync(dto));
+            if (_notification.HasNotifications) return false;
+
             using TransactionScope transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             bool response = await _tableService.ChangeStatus(dto);
             transactionScope.Complete();

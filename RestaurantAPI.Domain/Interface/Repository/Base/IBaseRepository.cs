@@ -10,5 +10,6 @@ namespace RestaurantAPI.Domain.Interface.Repository.Base
         Task<TEntity> Update(TEntity entity);
         Task Delete(TEntity entity);
         Task<TEntity> DeleteById(long id);
+        Task<bool> ExistsById(long id);
     }
 }

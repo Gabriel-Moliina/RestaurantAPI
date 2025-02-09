@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using RestaurantAPI.Controllers.Base;
 using RestaurantAPI.Domain.DTO.Reservation;
 using RestaurantAPI.Domain.DTO.Table;
 using RestaurantAPI.Domain.Interface.Application;
 using RestaurantAPI.Domain.Interface.Notification;
 using RestaurantAPI.ViewModels;
 
-namespace RestaurantAPI.Controllers.Base
+namespace RestaurantAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

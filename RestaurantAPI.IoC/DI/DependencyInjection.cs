@@ -5,12 +5,15 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using RestaurantAPI.Application.Application;
+using RestaurantAPI.Domain.Builder;
+using RestaurantAPI.Domain.Builder.ReservationBuilder;
 using RestaurantAPI.Domain.DTO.Messaging;
 using RestaurantAPI.Domain.DTO.Reservation;
 using RestaurantAPI.Domain.DTO.Restaurant;
 using RestaurantAPI.Domain.DTO.Table;
 using RestaurantAPI.Domain.DTO.User;
 using RestaurantAPI.Domain.Interface.Application;
+using RestaurantAPI.Domain.Interface.Builder;
 using RestaurantAPI.Domain.Interface.Email;
 using RestaurantAPI.Domain.Interface.Messaging;
 using RestaurantAPI.Domain.Interface.Notification;
@@ -42,6 +45,7 @@ namespace RestaurantAPI.IoC
                 .AddApplication()
                 .AddServices()
                 .AddMessagingRabbitMQ(configuration)
+                .AddBuilders()
                 .AddRepository();
         }
 
@@ -74,8 +78,11 @@ namespace RestaurantAPI.IoC
             services.AddScoped<IValidator<UserCreateDTO>, UserCreateValidator>();
             services.AddScoped<IValidator<UserLoginDTO>, UserLoginValidator>();
             services.AddScoped<IValidator<RestaurantCreateDTO>, RestaurantCreateValidator>();
+            services.AddScoped<IValidator<RestaurantDeleteDTO>, RestaurantDeleteValidator>();
             services.AddScoped<IValidator<TableDTO>, TableCreateValidator>();
             services.AddScoped<IValidator<TableReservationDTO>, TableReservationValidator>();
+            services.AddScoped<IValidator<TableCancelReservationDTO>, TableReservationCancelValidator>();
+            services.AddScoped<IValidator<TableChangeStatusDTO>, TableChangeStatusValidator>();
             return services;
         }
 
@@ -124,6 +131,14 @@ namespace RestaurantAPI.IoC
             services.AddSingleton<IEmailSettings, EmailSettings>();
             services.AddSingleton<IRabbitMQSettings, RabbitMQSettings>();
             services.AddTransient<IRabbitMQSender, RabbitMQSender>();
+            return services;
+        }
+        
+        private static IServiceCollection AddBuilders(this IServiceCollection services)
+        {
+            services.AddScoped<IReservationBuilder, ReservationBuilder>();
+            services.AddScoped<ITableReservationResponseBuilder, TableReservationResponseBuilder>();
+            services.AddScoped<IEmailBuilder, EmailBuilder>();
             return services;
         }
     }

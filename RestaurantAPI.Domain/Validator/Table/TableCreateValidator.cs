@@ -16,11 +16,11 @@ namespace RestaurantAPI.Domain.Validator.Table
             _tableRepository = tableRepository;
             _restaurantRepository = restaurantRepository;
 
-            RuleFor(a => new { identification = a.Identification, restaurantId = a.RestaurantId })
+            RuleFor(a => new { a.Identification, a.RestaurantId })
                 .MustAsync(async (obj, cancellationToken) =>
                 {
-                    if (string.IsNullOrEmpty(obj.identification)) return false;
-                    return !await _tableRepository.Exists(obj.identification, obj.restaurantId);
+                    if (string.IsNullOrEmpty(obj.Identification)) return false;
+                    return !await _tableRepository.Exists(obj.Identification, obj.RestaurantId);
                 })
                 .WithName("Table")
                 .WithMessage("Mesa já existente!");

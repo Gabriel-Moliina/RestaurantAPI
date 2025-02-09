@@ -10,7 +10,7 @@ namespace RestaurantAPI.Infra.Email.Sender
     public class EmailSender : IEmailSender
     {
         private readonly IEmailSettings _emailSettings;
-        public EmailSender(IConfiguration configuration, IEmailSettings emailSettings)
+        public EmailSender(IEmailSettings emailSettings)
         {
             _emailSettings = emailSettings;
         }

@@ -29,7 +29,7 @@ namespace RestaurantAPI.BackgroudServices
 
             var connection = await factory.CreateConnectionAsync();
             var channel = await connection.CreateChannelAsync();
-            await channel.QueueDeclareAsync(queue: EmailDTO.QueueName, false, false, false, arguments: null);
+            await channel.QueueDeclareAsync(queue: EmailDTO.QueueNameEmail, false, false, false, arguments: null);
 
             stoppingToken.ThrowIfCancellationRequested();
             var consumer = new AsyncEventingBasicConsumer(channel);
@@ -39,7 +39,7 @@ namespace RestaurantAPI.BackgroudServices
                 EmailDTO tableReserveEmail = JsonSerializer.Deserialize<EmailDTO>(content);
                 await _emailSender.SendEmail(tableReserveEmail);
             };
-            await channel.BasicConsumeAsync(EmailDTO.QueueName, true, consumer);
+            await channel.BasicConsumeAsync(EmailDTO.QueueNameEmail, true, consumer);
         }
     }
 }

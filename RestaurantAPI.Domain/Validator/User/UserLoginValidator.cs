@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FluentValidation;
+﻿using FluentValidation;
 using RestaurantAPI.Domain.DTO.User;
 using RestaurantAPI.Domain.Interface.Repository;
 
@@ -16,17 +11,17 @@ namespace RestaurantAPI.Domain.Validator.User
         {
             _userRepository = userRepository;
 
-            RuleFor(a => a.Email)
-                .EmailAddress()
-                .WithMessage("Email inválido!");
-
-            RuleFor(a => a.Email)
-                .MustAsync(async (email, cancellation) =>
+            RuleFor(a => new { a.Email, a.Password })
+                .MustAsync(async (dto, cancellation) =>
                 {
-                    bool exists = await _userRepository.Exists(email);
-                    return exists;
+                    if (string.IsNullOrEmpty(dto.Email))
+                        return false;
+
+                    var user = await _userRepository.ValidateUser(dto.Email, dto.Password);
+                    return user != null;
                 })
-                .WithMessage("Usuário não encontrado!");
+                .WithName("Login")
+                .WithMessage("Usuário/senha não encontrados!");
 
             RuleFor(a => a.Password)
                 .NotEmpty()

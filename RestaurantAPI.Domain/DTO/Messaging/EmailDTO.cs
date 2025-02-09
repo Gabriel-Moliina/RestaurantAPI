@@ -4,13 +4,9 @@ namespace RestaurantAPI.Domain.DTO.Messaging
 {
     public class EmailDTO : BaseMessage
     {
-        public const string QueueName = "queue_email_reservation";
-        public EmailDTO(string name, string subject, string receiver, string message) : base(QueueName)
+        public const string QueueNameEmail = "queue_email_reservation";
+        public EmailDTO() : base(QueueNameEmail)
         {
-            Name = name;
-            Subject = subject;
-            Receiver = receiver;
-            Message = message;
         }
 
         public string Name { get; set; }

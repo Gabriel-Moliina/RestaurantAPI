@@ -49,5 +49,7 @@ namespace RestaurantAPI.Infra.Repository.Base
             await _context.SaveChangesAsync();
             return entity;
         }
+
+        public virtual async Task<bool> ExistsById(long id) => await _dbSet.AnyAsync(e => e.Id == id);
     }
 }

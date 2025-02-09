@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
-using FluentValidation;
 using RestaurantAPI.Domain.DTO.Reservation;
 using RestaurantAPI.Domain.DTO.Table;
 using RestaurantAPI.Domain.Entities;
-using RestaurantAPI.Domain.Interface.Notification;
+using RestaurantAPI.Domain.Interface.Builder;
 using RestaurantAPI.Domain.Interface.Repository;
 using RestaurantAPI.Domain.Interface.Services;
 using RestaurantAPI.Domain.ValueObjects.Table;
@@ -15,44 +14,41 @@ namespace RestaurantAPI.Service.Services
     {
         private readonly IReservationRepository _reservationRepository;
         private readonly ITableRepository _tableRepository;
-        private readonly IValidator<TableReservationDTO> _validatorReservation;
+        private readonly IReservationBuilder _reservationBuilder;
+        private readonly ITableReservationResponseBuilder _tableReservationResponseBuilder;
         public ReservationService(IMapper mapper,
-            INotification notification,
             ITableRepository tableRepository,
-            IValidator<TableReservationDTO> validatorReservation,
-            IReservationRepository reservationRepository) : base(mapper, notification)
+            IReservationBuilder reservationBuilder, 
+            ITableReservationResponseBuilder tableReservationResponseBuilder,
+            IReservationRepository reservationRepository) : base(mapper)
         {
+            _reservationBuilder = reservationBuilder;
+            _tableReservationResponseBuilder = tableReservationResponseBuilder;
             _tableRepository = tableRepository;
             _reservationRepository = reservationRepository;
-            _validatorReservation = validatorReservation;
         }
 
         public async Task<TableReservationResponseDTO> Create(TableReservationDTO dto)
         {
-            _notification.AddNotifications(await _validatorReservation.ValidateAsync(dto));
-            if (_notification.HasNotifications) return null;
-
             var table = await _tableRepository.GetById(dto.TableId);
             table.Status = EnumTableStatus.Reserved;
             await _tableRepository.Update(table);
 
-            Reservation reservation = new()
-            {
-                Date = dto.Date,
-                Email = dto.Email,
-                TableId = dto.TableId
-            };
+            Reservation reservation = _reservationBuilder.
+                WithDate(dto.Date).
+                WithEmail(dto.Email).
+                WithTableId(dto.TableId).
+                Build();
 
             await _reservationRepository.Add(reservation);
 
-            TableReservationResponseDTO response = new()
-            {
-                Date = dto.Date,
-                Email = dto.Email,
-                Identification = table.Identification,
-                Reserved = true,
-                RestaurantName = table.Restaurant.Name
-            };
+            TableReservationResponseDTO response = _tableReservationResponseBuilder.
+                WithDate(dto.Date).
+                WithEmail(dto.Email).
+                WithIdentification(table.Identification).
+                WithReserved(true).
+                WithRestaurantName(table.Restaurant.Name).
+                Build();
 
             return response;
         }
@@ -60,24 +56,16 @@ namespace RestaurantAPI.Service.Services
         public async Task<TableReservationResponseDTO> Cancel(long tableId)
         {
             var table = await _tableRepository.GetById(tableId);
-            if (table == null)
-                _notification.AddNotification("Mesa", "Mesa não encontrada!");
-
             var reservation = await _reservationRepository.GetByTableId(tableId);
-            if (reservation == null)
-                _notification.AddNotification("Mesa", "Nenhuma reserva encontrada para esta mesa!");
-
-            if(_notification.HasNotifications) return null;
 
             table.Status = EnumTableStatus.Free;
-            TableReservationResponseDTO reseponse = new()
-            {
-                Date = reservation.Date,
-                Email = reservation.Email,
-                Identification = table.Identification,
-                Reserved = true,
-                RestaurantName = table.Restaurant.Name
-            };
+            TableReservationResponseDTO reseponse = _tableReservationResponseBuilder.
+                WithDate(reservation.Date).
+                WithEmail(reservation.Email).
+                WithIdentification(table.Identification).
+                WithReserved(true).
+                WithRestaurantName(table.Restaurant.Name).
+                Build();
 
             await _reservationRepository.Delete(reservation);
             await _tableRepository.Update(table);
