@@ -19,7 +19,7 @@ namespace RestaurantAPI.Infra.Email.Sender
         {
             var message = new MimeMessage();
 
-            message.From.Add(new MailboxAddress("Reserva", _emailSettings.Email));
+            message.From.Add(new MailboxAddress(email.Name, _emailSettings.Email));
 
             message.To.Add(MailboxAddress.Parse(email.Receiver));
             message.Subject = email.Subject;
@@ -28,12 +28,8 @@ namespace RestaurantAPI.Infra.Email.Sender
                 Text = email.Message
             };
 
-            var client = new SmtpClient()
-            {
-                CheckCertificateRevocation = false,
-                SslProtocols = SslProtocols.Tls | SslProtocols.Tls11 | SslProtocols.Tls12 | SslProtocols.Tls13,
-                ServerCertificateValidationCallback = (s, c, h, e) => true
-            };
+            using var client = new SmtpClient();
+            client.ServerCertificateValidationCallback = (s, c, h, e) => true;
 
             await client.ConnectAsync(_emailSettings.SMTP,
                                       _emailSettings.Port,

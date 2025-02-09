@@ -26,7 +26,8 @@ namespace RestaurantAPI.Application.Application
             transactionScope.Complete();
             if (table != null && table.Reserved)
             {
-                var email = new EmailDTO($"{table.RestaurantName} - Reserva",
+                var email = new EmailDTO(table.RestaurantName,
+                    $"{table.RestaurantName} - Reserva Confirmada",
                     table.Email,
                     $"Olá, gostaria de informar que sua reserva para a mesa {table.Identification} foi CONFIRMADA no dia {table.Date:dd/MM/yyyy} às {table.Date:HH:mm}");
                 await _rabbitSender.SendMessage<EmailDTO>(email);
@@ -42,7 +43,8 @@ namespace RestaurantAPI.Application.Application
 
             if (table != null && table.Reserved)
             {
-                var email = new EmailDTO($"{table.RestaurantName} - Reserva",
+                var email = new EmailDTO(table.RestaurantName,
+                $"{table.RestaurantName} - Reserva Cancelada",
                 table.Email,
                 $"Olá, gostaria de informar que sua reserva para a mesa {table.Identification} foi CANCELADA no dia {table.Date:dd/MM/yyyy} às {table.Date:HH:mm}");
                 await _rabbitSender.SendMessage<EmailDTO>(email);

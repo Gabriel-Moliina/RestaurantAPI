@@ -31,6 +31,10 @@ namespace RestaurantAPI.Domain.Validator.Table
                     return await _restaurantRepository.GetById(restaurantId) != null;
                 })
                 .WithMessage("Restaurante não encontrado!");
+
+            RuleFor(a => a.Capacity)
+                .NotEqual(0)
+                .WithMessage("A capcaidade da mesa não pode ser 0");
         }
     }
 }
