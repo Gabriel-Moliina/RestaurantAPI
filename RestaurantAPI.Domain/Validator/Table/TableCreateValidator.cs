@@ -22,7 +22,7 @@ namespace RestaurantAPI.Domain.Validator.Table
                     if (string.IsNullOrEmpty(obj.Identification)) return false;
                     return !await _tableRepository.Exists(obj.Identification, obj.RestaurantId);
                 })
-                .WithName("Table")
+                .WithName("Identification")
                 .WithMessage("Mesa já existente!");
 
             RuleFor(a => a.RestaurantId)

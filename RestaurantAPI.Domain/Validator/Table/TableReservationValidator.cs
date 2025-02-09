@@ -23,9 +23,7 @@ namespace RestaurantAPI.Domain.Validator.Table
                     var table = await _tableRepository.GetById(tableId);
                     return table != null;
                 })
-                .WithMessage("A mesa não foi encontrada");
-
-            RuleFor(a => a.TableId)
+                .WithMessage("A mesa não foi encontrada")
                 .MustAsync(async (tableId, cancellationToken) =>
                 {
                     var table = await _tableRepository.GetById(tableId);

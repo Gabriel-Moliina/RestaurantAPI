@@ -21,7 +21,7 @@ namespace RestaurantAPI.Infra.Security.Token
             _jwtSettings = new JwtSettings
             {
                 SecretKey = configuration["JwtSettings:SecretKey"],
-                ExpirationInMinutes = int.Parse(configuration["JwtSettings:ExpirationInMinutes"] ?? "60")
+                ExpirationInMinutes = int.Parse(configuration["JwtSettings:ExpirationInMinutes"] ?? "240")
             };
         }
         public string Generate(UserLoginResponseDTO user)

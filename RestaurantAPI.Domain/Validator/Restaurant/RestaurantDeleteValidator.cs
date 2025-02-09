@@ -14,7 +14,6 @@ namespace RestaurantAPI.Domain.Validator.Restaurant
                 {
                     return await _restaurantRepository.ExistsById(id);
                 })
-                .WithName("Restaurante")
                 .WithMessage("Restaurante não encontrado");
         }
     }

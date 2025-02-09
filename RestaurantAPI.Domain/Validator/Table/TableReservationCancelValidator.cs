@@ -19,14 +19,12 @@ namespace RestaurantAPI.Domain.Validator.Table
                 {
                     return await _tableRepository.ExistsById(tableId);
                 })
-                .WithName("Mesa")
                 .WithMessage("Mesa não encontrada")
                 .MustAsync(async (tableId, cancellationToken) =>
                 {
                     var reservation = await _reservationRepository.GetByTableId(tableId);
                     return reservation != null;
                 })
-                .WithName("Mesa")
                 .WithMessage("Nenhuma reserva encontrada para esta mesa!");
         }
     }
