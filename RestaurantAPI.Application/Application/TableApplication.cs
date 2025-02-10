@@ -25,6 +25,7 @@ namespace RestaurantAPI.Application.Application
         }
 
         public async Task<TableDTO> GetById(long id) => await _tableService.GetById(id);
+        public async Task<List<TableDTO>> GetByRestaurantId(long restaurantId) => await _tableService.GetByRestaurantId(restaurantId);
         public async Task<TableResponseDTO> Create(TableDTO dto)
         {
             _notification.AddNotifications(await _validatorTableCreate.ValidateAsync(dto));

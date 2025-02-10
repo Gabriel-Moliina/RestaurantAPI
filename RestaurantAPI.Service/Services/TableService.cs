@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
-using FluentValidation;
 using RestaurantAPI.Domain.DTO.Table;
 using RestaurantAPI.Domain.Entities;
 using RestaurantAPI.Domain.Interface.Repository;
 using RestaurantAPI.Domain.Interface.Services;
-using RestaurantAPI.Domain.ValueObjects.Table;
 using RestaurantAPI.Service.Services.Base;
 
 namespace RestaurantAPI.Service.Services
@@ -19,6 +17,7 @@ namespace RestaurantAPI.Service.Services
         }
 
         public async Task<TableDTO> GetById(long id) => _mapper.Map<TableDTO>(await _tableRepository.GetById(id));
+        public async Task<List<TableDTO>> GetByRestaurantId(long restaurantId) => _mapper.Map<List<TableDTO>>(await _tableRepository.GetByRestaurantId(restaurantId));
         public async Task<TableResponseDTO> Create(TableDTO dto)
         {
             var table = _mapper.Map<Table>(dto);

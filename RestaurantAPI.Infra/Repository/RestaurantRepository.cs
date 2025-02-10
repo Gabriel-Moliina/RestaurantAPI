@@ -12,8 +12,6 @@ namespace RestaurantAPI.Infra.Repository
         {
         }
 
-        public override async Task<List<Restaurant>> Get() => await _dbSet.AsNoTracking().Include(e => e.Tables).ToListAsync();
-
         public override async Task<Restaurant> GetById(long restaurantId) => 
             await _dbSet.Where(e => e.Id == restaurantId)
                 .Include(e => e.Tables)

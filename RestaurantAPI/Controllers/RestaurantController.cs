@@ -34,12 +34,6 @@ namespace RestaurantAPI.Controllers
         {
             return Execute(async () => await _restaurantApplication.GetById(id));
         }
-        
-        [HttpGet("GetByUserId/{userId}")]
-        public Task<ActionResult<ResponseApiViewModel<List<RestaurantDTO>>>> GetByUserId(long userId)
-        {
-            return Execute(async () => await _restaurantApplication.GetByUserId(userId));
-        }
 
         [HttpPost("Create")]
         public Task<ActionResult<ResponseApiViewModel<RestaurantDTO>>> Create([FromBody] RestaurantCreateDTO restaurant)

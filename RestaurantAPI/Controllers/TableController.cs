@@ -27,6 +27,13 @@ namespace RestaurantAPI.Controllers
             return Execute(async () => await _tableApplication.GetById(id));
         }
 
+        [HttpGet("GetByRestaurantId/{restaurantId}")]
+        public Task<ActionResult<ResponseApiViewModel<List<TableDTO>>>> GetByRestaurantId(long restaurantId)
+        {
+            return Execute(async () => await _tableApplication.GetByRestaurantId(restaurantId));
+        }
+
+
         [HttpPost("Create")]
         public Task<ActionResult<ResponseApiViewModel<TableResponseDTO>>> Create([FromBody] TableDTO table)
         {

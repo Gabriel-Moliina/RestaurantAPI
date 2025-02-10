@@ -19,7 +19,6 @@ namespace RestaurantAPI.Infra.Repository
         public async Task<User> ValidateUser(string email, string password) => 
             await _dbSet.AsNoTracking()
             .Where(x => x.Email == email && x.Password == password.Crypt())
-            .Include(e => e.Restaurants)
             .FirstOrDefaultAsync();
     }
 }
