@@ -27,7 +27,7 @@ namespace RestaurantAPI.Controllers
             return Execute(async () => await _reservationApplication.Create(dto));
         }
 
-        [HttpDelete("CancelReservation/{tableId}")]
+        [HttpDelete("{tableId}")]
         public Task<ActionResult<ResponseApiViewModel<TableReservationResponseDTO>>> Cancel(long tableId)
         {
             return Execute(async () => await _reservationApplication.Cancel(tableId));
