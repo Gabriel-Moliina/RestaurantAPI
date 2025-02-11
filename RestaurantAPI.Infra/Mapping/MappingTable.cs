@@ -21,9 +21,9 @@ namespace RestaurantAPI.Infra.Mapping
                 .HasColumnType("int")
                 .HasColumnName(nameof(Table.Capacity).ToLower());
             
-            builder.Property(p => p.Status)
-                .HasColumnType("int")
-                .HasColumnName(nameof(Table.Status).ToLower());
+            builder.Property(p => p.Reserved)
+                .HasColumnType("tinyint")
+                .HasColumnName(nameof(Table.Reserved).ToLower());
 
             builder.Property(p => p.RestaurantId)
                 .HasColumnType("bigint")

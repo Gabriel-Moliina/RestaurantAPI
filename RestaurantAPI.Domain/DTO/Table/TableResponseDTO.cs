@@ -1,6 +1,4 @@
-﻿using RestaurantAPI.Domain.ValueObjects.Table;
-
-namespace RestaurantAPI.Domain.DTO.Table
+﻿namespace RestaurantAPI.Domain.DTO.Table
 {
     public class TableResponseDTO
     {
@@ -8,6 +6,6 @@ namespace RestaurantAPI.Domain.DTO.Table
         public string Identification { get; set; }
         public int Capacity { get; set; }
         public long RestaurantId { get; set; }
-        public EnumTableStatus Status { get; set; }
+        public long Reserved { get; set; }
     }
 }

@@ -9,8 +9,9 @@ namespace RestaurantAPI.Domain.Mapper
         public TableMapper()
         {
             CreateMap<Table, TableDTO>();
-            CreateMap<TableDTO, Table>();
             CreateMap<Table, TableResponseDTO>();
+            CreateMap<TableDTO, Table>();
+            CreateMap<TableCreateDTO, Table>();
         }
     }
 }

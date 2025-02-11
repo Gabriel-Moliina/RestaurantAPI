@@ -10,27 +10,43 @@ namespace RestaurantAPI.Service.Services
     public class TableService : BaseService, ITableService
     {
         private readonly ITableRepository _tableRepository;
+        private readonly IReservationRepository _reservationRepository;
         public TableService(IMapper mapper,
-            ITableRepository tableRepository) : base(mapper)
+            ITableRepository tableRepository,
+            IReservationRepository reservationRepository) : base(mapper)
         {
             _tableRepository = tableRepository;
+            _reservationRepository = reservationRepository;
         }
 
         public async Task<TableDTO> GetById(long id) => _mapper.Map<TableDTO>(await _tableRepository.GetById(id));
         public async Task<List<TableDTO>> GetByRestaurantId(long restaurantId) => _mapper.Map<List<TableDTO>>(await _tableRepository.GetByRestaurantId(restaurantId));
-        public async Task<TableResponseDTO> Create(TableDTO dto)
+        public async Task<TableResponseDTO> Create(TableCreateDTO dto)
         {
-            var table = _mapper.Map<Table>(dto);
+            var table = await _tableRepository.GetById(dto.Id) ?? new Table();
+            table.Capacity = dto.Capacity;
+            table.Identification = dto.Identification;
 
-            return _mapper.Map<TableResponseDTO>(await _tableRepository.Add(table));
+            if (dto.Id == 0)
+            {
+                table.RestaurantId = dto.RestaurantId;
+                await _tableRepository.Add(table);
+            }
+            else
+                await _tableRepository.Update(table);
+
+            return _mapper.Map<TableResponseDTO>(table);
         }
         public async Task<TableDTO> DeleteById(long id) => _mapper.Map<TableDTO>(await _tableRepository.DeleteById(id));
 
-        public async Task<bool> ChangeStatus(TableChangeStatusDTO dto)
+        public async Task<bool> Release(TableChangeStatusDTO dto)
         {
             var table = await _tableRepository.GetById(dto.TableId);
-            table.Status = dto.Status;
+            table.Reserved = false;
             await _tableRepository.Update(table);
+
+            var reservation = await _reservationRepository.GetByTableId(table.Id);
+            await _reservationRepository.Delete(reservation);
 
             return true;
         }

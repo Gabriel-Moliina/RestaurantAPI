@@ -10,12 +10,12 @@ namespace RestaurantAPI.Application.Application
 {
     public class TableApplication : BaseApplication, ITableApplication
     {
-        private readonly IValidator<TableDTO> _validatorTableCreate;
+        private readonly IValidator<TableCreateDTO> _validatorTableCreate;
         private readonly IValidator<TableChangeStatusDTO> _validatorTableChangeStatus;
         private readonly ITableService _tableService;
         public TableApplication(INotification notification,
             ITableService tableService,
-            IValidator<TableDTO> validatorTableCreate,
+            IValidator<TableCreateDTO> validatorTableCreate,
             IValidator<TableChangeStatusDTO> validatorTableChangeStatus
             ) : base(notification)
         {
@@ -26,7 +26,7 @@ namespace RestaurantAPI.Application.Application
 
         public async Task<TableDTO> GetById(long id) => await _tableService.GetById(id);
         public async Task<List<TableDTO>> GetByRestaurantId(long restaurantId) => await _tableService.GetByRestaurantId(restaurantId);
-        public async Task<TableResponseDTO> Create(TableDTO dto)
+        public async Task<TableResponseDTO> Create(TableCreateDTO dto)
         {
             _notification.AddNotifications(await _validatorTableCreate.ValidateAsync(dto));
             if (_notification.HasNotifications) return null;
@@ -38,13 +38,13 @@ namespace RestaurantAPI.Application.Application
         }
         public async Task<TableDTO> DeleteById(long id) => await _tableService.DeleteById(id);
 
-        public async Task<bool> ChangeStatus(TableChangeStatusDTO dto)
+        public async Task<bool> Release(TableChangeStatusDTO dto)
         {
             _notification.AddNotifications(await _validatorTableChangeStatus.ValidateAsync(dto));
             if (_notification.HasNotifications) return false;
 
             using TransactionScope transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-            bool response = await _tableService.ChangeStatus(dto);
+            bool response = await _tableService.Release(dto);
             transactionScope.Complete();
             return response;
         }

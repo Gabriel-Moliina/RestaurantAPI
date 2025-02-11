@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using RestaurantAPI.Domain.DTO.Reservation;
 using RestaurantAPI.Domain.Interface.Repository;
-using RestaurantAPI.Domain.ValueObjects.Table;
 
 namespace RestaurantAPI.Domain.Validator.Table
 {
@@ -27,7 +26,7 @@ namespace RestaurantAPI.Domain.Validator.Table
                 .MustAsync(async (tableId, cancellationToken) =>
                 {
                     var table = await _tableRepository.GetById(tableId);
-                    return table?.Status == EnumTableStatus.Free;
+                    return !(table?.Reserved ?? false);
                 })
                 .WithMessage("A mesa não está disponível para reserva");
         }

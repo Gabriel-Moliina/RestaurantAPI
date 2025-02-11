@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using RestaurantAPI.Domain.DTO.Table;
 using RestaurantAPI.Domain.Interface.Repository;
-using RestaurantAPI.Domain.ValueObjects.Table;
 
 namespace RestaurantAPI.Domain.Validator.Table
 {
@@ -11,14 +10,6 @@ namespace RestaurantAPI.Domain.Validator.Table
         public TableChangeStatusValidator(ITableRepository tableRepository)
         {
             _tableRepository = tableRepository;
-
-            RuleFor(a => a.Status)
-                .NotEmpty()
-                .Must((status) =>
-                {
-                    return Enum.IsDefined(typeof(EnumTableStatus), status);
-                })
-                .WithMessage("Status não encontrado!");
 
             RuleFor(a => a.TableId)
                 .NotEqual(0)

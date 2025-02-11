@@ -5,7 +5,7 @@ using RestaurantAPI.Domain.Interface.Token;
 
 namespace RestaurantAPI.Domain.Validator.Table
 {
-    public class TableCreateValidator : AbstractValidator<TableDTO>
+    public class TableCreateValidator : AbstractValidator<TableCreateDTO>
     {
         private readonly ITableRepository _tableRepository;
         private readonly IRestaurantRepository _restaurantRepository;

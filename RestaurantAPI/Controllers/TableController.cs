@@ -34,21 +34,15 @@ namespace RestaurantAPI.Controllers
         }
 
         [HttpPost("Create")]
-        public Task<ActionResult<ResponseApiViewModel<TableResponseDTO>>> Create([FromBody] TableDTO table)
+        public Task<ActionResult<ResponseApiViewModel<TableResponseDTO>>> Create([FromBody] TableCreateDTO table)
         {
             return Execute(async () => await _tableApplication.Create(table));
         }
 
-        [HttpPut("{id}")]
-        public Task<ActionResult<ResponseApiViewModel<List<TableDTO>>>> Update(long restaurantId)
+        [HttpPost("Release")]
+        public Task<ActionResult<ResponseApiViewModel<bool>>> Release(TableChangeStatusDTO dto)
         {
-            return Execute(async () => await _tableApplication.GetByRestaurantId(restaurantId));
-        }
-
-        [HttpPost("ChangeStatus")]
-        public Task<ActionResult<ResponseApiViewModel<bool>>> ChangeStatus(TableChangeStatusDTO dto)
-        {
-            return Execute(async () => await _tableApplication.ChangeStatus(dto));
+            return Execute(async () => await _tableApplication.Release(dto));
         }
 
         [HttpDelete("{id}")]

@@ -5,7 +5,6 @@ using RestaurantAPI.Domain.Entities;
 using RestaurantAPI.Domain.Interface.Builder;
 using RestaurantAPI.Domain.Interface.Repository;
 using RestaurantAPI.Domain.Interface.Services;
-using RestaurantAPI.Domain.ValueObjects.Table;
 using RestaurantAPI.Service.Services.Base;
 
 namespace RestaurantAPI.Service.Services
@@ -31,7 +30,7 @@ namespace RestaurantAPI.Service.Services
         public async Task<TableReservationResponseDTO> Create(TableReservationDTO dto)
         {
             var table = await _tableRepository.GetById(dto.TableId);
-            table.Status = EnumTableStatus.Reserved;
+            table.Reserved = true;
             await _tableRepository.Update(table);
 
             Reservation reservation = _reservationBuilder.
@@ -46,7 +45,7 @@ namespace RestaurantAPI.Service.Services
                 WithDate(dto.Date).
                 WithEmail(dto.Email).
                 WithIdentification(table.Identification).
-                WithReserved(true).
+                WithReserved(table.Reserved).
                 WithRestaurantName(table.Restaurant.Name).
                 Build();
 
@@ -58,12 +57,12 @@ namespace RestaurantAPI.Service.Services
             var table = await _tableRepository.GetById(tableId);
             var reservation = await _reservationRepository.GetByTableId(tableId);
 
-            table.Status = EnumTableStatus.Free;
+            table.Reserved = false;
             TableReservationResponseDTO reseponse = _tableReservationResponseBuilder.
                 WithDate(reservation.Date).
                 WithEmail(reservation.Email).
                 WithIdentification(table.Identification).
-                WithReserved(true).
+                WithReserved(table.Reserved).
                 WithRestaurantName(table.Restaurant.Name).
                 Build();
 
