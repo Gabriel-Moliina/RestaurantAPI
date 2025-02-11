@@ -29,6 +29,10 @@ namespace RestaurantAPI.Domain.Validator.Table
                     return !(table?.Reserved ?? false);
                 })
                 .WithMessage("A mesa não está disponível para reserva");
+
+            RuleFor(a => a.Date)
+                .NotEqual(DateTime.MinValue)
+                .WithMessage("Selecione uma data válida");
         }
     }
 }
