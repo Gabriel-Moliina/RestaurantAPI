@@ -6,7 +6,7 @@ namespace RestaurantAPI.Domain.Interface.Application
     {
         Task<List<RestaurantDTO>> Get();
         Task<RestaurantDTO> GetById(long restaurantId);
-        Task<RestaurantDTO> Create(RestaurantCreateDTO dto);
+        Task<RestaurantDTO> SaveOrUpdate(RestaurantCreateDTO dto);
         Task<RestaurantDTO> DeleteById(long id);
     }
 }

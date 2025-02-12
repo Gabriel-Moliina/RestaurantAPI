@@ -26,13 +26,13 @@ namespace RestaurantAPI.Application.Application
 
         public async Task<TableDTO> GetById(long id) => await _tableService.GetById(id);
         public async Task<List<TableDTO>> GetByRestaurantId(long restaurantId) => await _tableService.GetByRestaurantId(restaurantId);
-        public async Task<TableResponseDTO> Create(TableSaveDTO dto)
+        public async Task<TableResponseDTO> SaveOrUpdate(TableSaveDTO dto)
         {
             _notification.AddNotifications(await _validatorTableCreate.ValidateAsync(dto));
             if (_notification.HasNotifications) return null;
 
             using TransactionScope transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
-            var response = await _tableService.Create(dto);
+            var response = await _tableService.SaveOrUpdate(dto);
             transactionScope.Complete();
             return response;
         }

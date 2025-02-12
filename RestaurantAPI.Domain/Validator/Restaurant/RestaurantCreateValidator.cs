@@ -17,9 +17,7 @@ namespace RestaurantAPI.Domain.Validator.Restaurant
 
             RuleFor(a => a.Name)
                 .NotEmpty()
-                .WithMessage("O nome deve ser preenchido!");
-
-            RuleFor(a => a.Name)
+                .WithMessage("O nome deve ser preenchido!")
                 .MustAsync(async (name, cancellationToken) =>
                 {
                     if (string.IsNullOrEmpty(name)) return true;

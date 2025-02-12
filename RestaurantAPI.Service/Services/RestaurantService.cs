@@ -13,7 +13,7 @@ namespace RestaurantAPI.Service.Services
     {
         private readonly IRestaurantRepository _restaurantRepository;
         private readonly ITokenService _tokenService;
-        
+
         public RestaurantService(IRestaurantRepository restaurantRepository,
             ITokenService tokenService,
             IMapper mapper) : base(mapper)
@@ -24,10 +24,17 @@ namespace RestaurantAPI.Service.Services
 
         public async Task<List<RestaurantDTO>> Get() => _mapper.Map<List<RestaurantDTO>>(await _restaurantRepository.GetByUserId(_tokenService.GetUser().Id));
         public async Task<RestaurantDTO> GetById(long restaurantId) => _mapper.Map<RestaurantDTO>(await _restaurantRepository.GetById(restaurantId));
-        public async Task<RestaurantDTO> Create(RestaurantCreateDTO dto)
+        public async Task<RestaurantDTO> SaveOrUpdate(RestaurantCreateDTO dto)
         {
             var restaurant = _mapper.Map<Restaurant>(dto);
-            restaurant.UserId = _tokenService.GetUser().Id;
+
+            if (restaurant.Id == 0)
+            {
+                restaurant.UserId = _tokenService.GetUser().Id;
+                await _restaurantRepository.Add(restaurant);
+            }
+            else
+                await _restaurantRepository.Update(restaurant);
 
             return _mapper.Map<RestaurantDTO>(await _restaurantRepository.Add(restaurant));
         }

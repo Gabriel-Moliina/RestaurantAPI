@@ -33,10 +33,10 @@ namespace RestaurantAPI.Controllers
             return Execute(async () => await _tableApplication.GetByRestaurantId(restaurantId));
         }
 
-        [HttpPost("Create")]
-        public Task<ActionResult<ResponseApiViewModel<TableResponseDTO>>> Create([FromBody] TableSaveDTO table)
+        [HttpPost]
+        public Task<ActionResult<ResponseApiViewModel<TableResponseDTO>>> SaveOrUpdate([FromBody] TableSaveDTO table)
         {
-            return Execute(async () => await _tableApplication.Create(table));
+            return Execute(async () => await _tableApplication.SaveOrUpdate(table));
         }
 
         [HttpPost("Release")]
