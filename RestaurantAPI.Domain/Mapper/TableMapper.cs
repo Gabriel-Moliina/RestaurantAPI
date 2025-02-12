@@ -11,7 +11,7 @@ namespace RestaurantAPI.Domain.Mapper
             CreateMap<Table, TableDTO>();
             CreateMap<Table, TableResponseDTO>();
             CreateMap<TableDTO, Table>();
-            CreateMap<TableCreateDTO, Table>();
+            CreateMap<TableSaveDTO, Table>();
         }
     }
 }

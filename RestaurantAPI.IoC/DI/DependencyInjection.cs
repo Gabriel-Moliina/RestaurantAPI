@@ -79,7 +79,7 @@ namespace RestaurantAPI.IoC
             services.AddScoped<IValidator<UserLoginDTO>, UserLoginValidator>();
             services.AddScoped<IValidator<RestaurantCreateDTO>, RestaurantCreateValidator>();
             services.AddScoped<IValidator<RestaurantDeleteDTO>, RestaurantDeleteValidator>();
-            services.AddScoped<IValidator<TableCreateDTO>, TableCreateValidator>();
+            services.AddScoped<IValidator<TableSaveDTO>, TableSaveValidator>();
             services.AddScoped<IValidator<TableReservationDTO>, TableReservationValidator>();
             services.AddScoped<IValidator<TableCancelReservationDTO>, TableReservationCancelValidator>();
             services.AddScoped<IValidator<TableChangeStatusDTO>, TableChangeStatusValidator>();

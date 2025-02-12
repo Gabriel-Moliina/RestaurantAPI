@@ -5,24 +5,33 @@ using RestaurantAPI.Domain.Interface.Token;
 
 namespace RestaurantAPI.Domain.Validator.Table
 {
-    public class TableCreateValidator : AbstractValidator<TableCreateDTO>
+    public class TableSaveValidator : AbstractValidator<TableSaveDTO>
     {
         private readonly ITableRepository _tableRepository;
         private readonly IRestaurantRepository _restaurantRepository;
-        public TableCreateValidator(ITableRepository tableRepository,
+        public TableSaveValidator(ITableRepository tableRepository,
             IRestaurantRepository restaurantRepository,
             ITokenService tokenService)
         {
             _tableRepository = tableRepository;
             _restaurantRepository = restaurantRepository;
 
-            RuleFor(a => new { a.Identification, a.RestaurantId })
-                .MustAsync(async (obj, cancellationToken) =>
+            RuleFor(a => a.Identification)
+                .NotEmpty()
+                .WithName("Identificação")
+                .WithMessage("Identificação da mesa não pode ser vazia");
+
+            RuleFor(a => new { a.Identification, a.RestaurantId, a.Id })
+                .MustAsync(async (model, cancellationToken) =>
                 {
-                    if (string.IsNullOrEmpty(obj.Identification)) return false;
-                    return !await _tableRepository.Exists(obj.Identification, obj.RestaurantId);
+                    if(model.Id == 0)
+                        return !(await _tableRepository.Exists(model.Identification, model.RestaurantId) != null);
+
+                    var editedTable = (await _tableRepository.Exists(model.Identification, model.RestaurantId))?.Id == model.Id;
+
+                    return editedTable;
                 })
-                .WithName("Identification")
+                .WithName("Identificação")
                 .WithMessage("Mesa já existente!");
 
             RuleFor(a => a.RestaurantId)

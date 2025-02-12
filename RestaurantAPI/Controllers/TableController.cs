@@ -34,7 +34,7 @@ namespace RestaurantAPI.Controllers
         }
 
         [HttpPost("Create")]
-        public Task<ActionResult<ResponseApiViewModel<TableResponseDTO>>> Create([FromBody] TableCreateDTO table)
+        public Task<ActionResult<ResponseApiViewModel<TableResponseDTO>>> Create([FromBody] TableSaveDTO table)
         {
             return Execute(async () => await _tableApplication.Create(table));
         }

@@ -8,26 +8,23 @@ namespace RestaurantAPI.Domain.Validator.User
         public UserCreateValidator()
         {
             RuleFor(a => a.Email)
-                .NotEmpty()
-                .NotNull()
+                .EmailAddress()
                 .WithMessage("Email inválido!");
 
             RuleFor(a => a.Password)
                 .NotEmpty()
+                .WithMessage("A senha não pode ser vazia!")
                 .MinimumLength(6)
-                .WithMessage("Senha deve conter ao menos 6 dígitos")
+                .WithMessage("Senha deve conter ao menos 6 dígitos!")
                 .Must(ValidateUpper)
-                .WithMessage("A senha deve conter ao menos uma letra maiúscula!");
+                .WithMessage("A senha deve conter ao menos uma letra maiúscula!")
+                .WithName("Senha");
 
             RuleFor(a => new { a.Password, a.ConfirmPassword })
                 .Must(x => x.Password == x.ConfirmPassword)
-                .WithMessage("ConfirmPassword")
                 .WithMessage("As senhas devem coincidir");
         }
 
-        public bool ValidateUpper(string value)
-        {
-            return value.Any(char.IsUpper);
-        }
+        public bool ValidateUpper(string value) => value?.Any(char.IsUpper) ?? false;
     }
 }

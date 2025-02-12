@@ -14,18 +14,11 @@ namespace RestaurantAPI.Domain.Validator.User
             RuleFor(a => new { a.Email, a.Password })
                 .MustAsync(async (dto, cancellation) =>
                 {
-                    if (string.IsNullOrEmpty(dto.Email))
-                        return false;
-
                     var user = await _userRepository.ValidateUser(dto.Email, dto.Password);
                     return user != null;
                 })
                 .WithName("Login")
                 .WithMessage("Usuário/senha não encontrados!");
-
-            RuleFor(a => a.Password)
-                .NotEmpty()
-                .MinimumLength(6);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace RestaurantAPI.Infra.Repository
         public async Task<List<Table>> GetByRestaurantId(long restaurantId) =>
             await _dbSet.Where(e => e.RestaurantId == restaurantId).ToListAsync();
 
-        public async Task<bool> Exists(string identification, long restaurantId) =>
-            await _dbSet.AnyAsync(e => e.Identification == identification && e.RestaurantId == restaurantId);
+        public async Task<Table> Exists(string identification, long restaurantId) =>
+            await _dbSet.FirstOrDefaultAsync(e => e.Identification == identification && e.RestaurantId == restaurantId);
     }
 }

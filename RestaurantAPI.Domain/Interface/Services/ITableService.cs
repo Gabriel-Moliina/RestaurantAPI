@@ -6,7 +6,7 @@ namespace RestaurantAPI.Domain.Interface.Services
     {
         Task<TableDTO> GetById(long id);
         Task<List<TableDTO>> GetByRestaurantId(long restaurantId);
-        Task<TableResponseDTO> Create(TableCreateDTO dto);
+        Task<TableResponseDTO> Create(TableSaveDTO dto);
         Task<TableDTO> DeleteById(long id);
         Task<bool> Release(TableChangeStatusDTO dto);
     }
