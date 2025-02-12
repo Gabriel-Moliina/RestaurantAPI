@@ -21,18 +21,31 @@ namespace RestaurantAPI.Domain.Validator.Table
                 .WithName("Identificação")
                 .WithMessage("Identificação da mesa não pode ser vazia");
 
-            RuleFor(a => new { a.Identification, a.RestaurantId, a.Id })
-                .MustAsync(async (model, cancellationToken) =>
+            When(a => a.Id == 0, () =>
+            {
+                RuleFor(a => a.Identification)
+                .MustAsync(async (model, identification, cancellationToken) =>
                 {
-                    if(model.Id == 0)
-                        return !(await _tableRepository.Exists(model.Identification, model.RestaurantId) != null);
-
-                    var editedTable = (await _tableRepository.Exists(model.Identification, model.RestaurantId))?.Id == model.Id;
-
-                    return editedTable;
+                    return !(await _tableRepository.GetByIdentificationRestaurant(model.Identification, model.RestaurantId) != null);
                 })
                 .WithName("Identificação")
                 .WithMessage("Mesa já existente!");
+            });
+            
+            When(a => a.Id != 0, () =>
+            {
+                RuleFor(a => a.Identification)
+                .MustAsync(async (model, identification, cancellationToken) =>
+                {
+                    var tableExists = await _tableRepository.GetByIdentificationRestaurantWithDiffId(model.Identification, model.RestaurantId, model.Id) == null;
+
+                    return tableExists;
+                })
+                .WithName("Identificação")
+                .WithMessage("Mesa já existente!");
+            });
+
+
 
             RuleFor(a => a.RestaurantId)
                 .MustAsync(async (restaurantId, cancellationToken) =>
