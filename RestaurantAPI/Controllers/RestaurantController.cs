@@ -35,7 +35,7 @@ namespace RestaurantAPI.Controllers
             return Execute(async () => await _restaurantApplication.GetById(id));
         }
 
-        [HttpPost("Create")]
+        [HttpPost]
         public Task<ActionResult<ResponseApiViewModel<RestaurantDTO>>> Create([FromBody] RestaurantCreateDTO restaurant)
         {
             return Execute(async () => await _restaurantApplication.Create(restaurant));
