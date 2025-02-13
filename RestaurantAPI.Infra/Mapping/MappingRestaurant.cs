@@ -17,10 +17,6 @@ namespace RestaurantAPI.Infra.Mapping
                 .HasColumnType("varchar(100)")
                 .HasColumnName(nameof(Restaurant.Name).ToLower());
 
-            builder.Property(p => p.Open)
-                .HasColumnType("tinyint(1)")
-                .HasColumnName(nameof(Restaurant.Open).ToLower());
-
             builder.Property(p => p.UserId)
                 .HasColumnType("bigint")
                 .HasColumnName(nameof(Restaurant.User).ToLower() + "_id");

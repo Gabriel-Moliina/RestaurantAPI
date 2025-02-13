@@ -9,6 +9,8 @@ namespace RestaurantAPI.Domain.Validator.Restaurant
         private readonly IRestaurantRepository _restaurantRepository;
         public RestaurantDeleteValidator(IRestaurantRepository restaurantRepository)
         {
+            _restaurantRepository = restaurantRepository;
+
             RuleFor(a => a.Id)
                 .MustAsync(async (id, cancellationToken) =>
                 {

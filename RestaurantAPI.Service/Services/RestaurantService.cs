@@ -36,7 +36,7 @@ namespace RestaurantAPI.Service.Services
             else
                 await _restaurantRepository.Update(restaurant);
 
-            return _mapper.Map<RestaurantDTO>(await _restaurantRepository.Add(restaurant));
+            return _mapper.Map<RestaurantDTO>(restaurant);
         }
         public async Task<RestaurantDTO> DeleteById(long id)
         {

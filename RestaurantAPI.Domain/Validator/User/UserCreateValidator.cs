@@ -1,15 +1,24 @@
 ﻿using FluentValidation;
 using RestaurantAPI.Domain.DTO.User;
+using RestaurantAPI.Domain.Interface.Repository;
 
 namespace RestaurantAPI.Domain.Validator.User
 {
     public class UserCreateValidator : AbstractValidator<UserCreateDTO>
     {
-        public UserCreateValidator()
+        private readonly IUserRepository _userRepository;
+        public UserCreateValidator(IUserRepository userRepository)
         {
+            _userRepository = userRepository;
+
             RuleFor(a => a.Email)
                 .EmailAddress()
-                .WithMessage("Email inválido!");
+                .WithMessage("Email inválido!")
+                .MustAsync(async (email, cancellationToken) =>
+                {
+                    return !await _userRepository.Exists(email);
+                })
+                .WithMessage("Email já cadastrado");
 
             RuleFor(a => a.Password)
                 .NotEmpty()

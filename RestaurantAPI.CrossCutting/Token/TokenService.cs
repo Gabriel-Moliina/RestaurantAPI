@@ -37,7 +37,6 @@ namespace RestaurantAPI.Infra.Security.Token
                 Subject = new System.Security.Claims.ClaimsIdentity(new[]
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ClaimTypes.Name, user.Name),
                     new Claim(ClaimTypes.Email, user.Email)
                 }),
                 Expires = DateTime.Now.AddMinutes(_jwtSettings.ExpirationInMinutes),
@@ -55,7 +54,6 @@ namespace RestaurantAPI.Infra.Security.Token
             return new UserDTO
             {
                 Id = int.Parse(user.FindFirst(ClaimTypes.NameIdentifier)?.Value),
-                Name = user.FindFirst(ClaimTypes.Name)?.Value,
                 Email = user.FindFirst(ClaimTypes.Email)?.Value
             };
         }

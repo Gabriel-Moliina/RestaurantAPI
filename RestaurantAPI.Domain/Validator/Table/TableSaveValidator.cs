@@ -10,8 +10,7 @@ namespace RestaurantAPI.Domain.Validator.Table
         private readonly ITableRepository _tableRepository;
         private readonly IRestaurantRepository _restaurantRepository;
         public TableSaveValidator(ITableRepository tableRepository,
-            IRestaurantRepository restaurantRepository,
-            ITokenService tokenService)
+            IRestaurantRepository restaurantRepository)
         {
             _tableRepository = tableRepository;
             _restaurantRepository = restaurantRepository;
