@@ -19,18 +19,6 @@ namespace RestaurantAPI.Controllers
             _userApplication = userApplication;
         }
 
-        [HttpGet]
-        public Task<ActionResult<ResponseApiViewModel<List<UserDTO>>>> Get()
-        {
-            return Execute(async () => await _userApplication.Get());
-        }
-
-        [HttpGet("{id}")]
-        public Task<ActionResult<ResponseApiViewModel<UserDTO>>> GetById(long id)
-        {
-            return Execute(async () => await _userApplication.GetById(id));
-        }
-
         [HttpPost("Login")]
         public Task<ActionResult<ResponseApiViewModel<UserLoginResponseDTO>>> Login([FromBody] UserLoginDTO user)
         {
