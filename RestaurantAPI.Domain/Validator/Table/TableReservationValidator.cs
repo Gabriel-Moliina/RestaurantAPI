@@ -13,7 +13,7 @@ namespace RestaurantAPI.Domain.Validator.Table
 
             RuleFor(a => a.Email)
                 .EmailAddress()
-                .WithMessage("Email inválido!");
+                .WithMessage("Email inválido");
 
             RuleFor(a => a.TableId)
                 .MustAsync(async (tableId, cancellationToken) =>

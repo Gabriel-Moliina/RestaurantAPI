@@ -22,17 +22,15 @@ namespace RestaurantAPI.Service.Services
             _tokenService = tokenService;
         }
 
-        public async Task<List<RestaurantDTO>> Get() => _mapper.Map<List<RestaurantDTO>>(await _restaurantRepository.GetByUserId(_tokenService.GetUser().Id));
+        public async Task<List<RestaurantDTO>> GetByUserId(long id) => _mapper.Map<List<RestaurantDTO>>(await _restaurantRepository.GetByUserId(id));
         public async Task<RestaurantDTO> GetById(long restaurantId) => _mapper.Map<RestaurantDTO>(await _restaurantRepository.GetById(restaurantId));
         public async Task<RestaurantDTO> SaveOrUpdate(RestaurantCreateDTO dto)
         {
             var restaurant = _mapper.Map<Restaurant>(dto);
+            restaurant.UserId = _tokenService.GetUser().Id;
 
             if (restaurant.Id == 0)
-            {
-                restaurant.UserId = _tokenService.GetUser().Id;
                 await _restaurantRepository.Add(restaurant);
-            }
             else
                 await _restaurantRepository.Update(restaurant);
 

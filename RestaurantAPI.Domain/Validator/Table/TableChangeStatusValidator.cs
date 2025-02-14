@@ -17,7 +17,7 @@ namespace RestaurantAPI.Domain.Validator.Table
                 {
                     return await _tableRepository.ExistsById(tableId);
                 })
-                .WithMessage("Mesa não encontrada!");
+                .WithMessage("Mesa não encontrada");
         }
     }
 }

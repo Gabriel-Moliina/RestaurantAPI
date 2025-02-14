@@ -13,6 +13,10 @@ namespace RestaurantAPI.Infra.Mapping
             builder.Property(p => p.Id)
                 .HasColumnName(nameof(User.Id).ToLower());
 
+            builder.Property(p => p.Name)
+                .HasColumnType("varchar(100)")
+                .HasColumnName(nameof(User.Name).ToLower());
+
             builder.Property(p => p.Email)
                 .HasColumnType("varchar(100)")
                 .HasColumnName(nameof(User.Email).ToLower());

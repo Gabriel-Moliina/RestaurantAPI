@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -25,6 +26,7 @@ using RestaurantAPI.Domain.Notification;
 using RestaurantAPI.Domain.Validator.Restaurant;
 using RestaurantAPI.Domain.Validator.Table;
 using RestaurantAPI.Domain.Validator.User;
+using RestaurantAPI.Infra.Context;
 using RestaurantAPI.Infra.Email.Email;
 using RestaurantAPI.Infra.Email.Sender;
 using RestaurantAPI.Infra.Repository;
@@ -38,7 +40,9 @@ namespace RestaurantAPI.IoC
     {
         public static void RegistryDependency(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddValidators()
+            services
+                .AddDbContext(configuration)
+                .AddValidators()
                 .AddNotifications()
                 .AddAutoMapper()
                 .AddAuthentication(configuration)
@@ -47,6 +51,15 @@ namespace RestaurantAPI.IoC
                 .AddMessagingRabbitMQ(configuration)
                 .AddBuilders()
                 .AddRepository();
+        }
+
+        private static IServiceCollection AddDbContext(this IServiceCollection services, IConfiguration configuration)
+        {
+            return services.AddDbContext<EntityContext>(opt =>
+            {
+                string connection = configuration.GetConnectionString("MySQL");
+                opt.UseMySql(connection, ServerVersion.AutoDetect(connection));
+            });
         }
 
         private static IServiceCollection AddRepository(this IServiceCollection services)

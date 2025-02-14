@@ -1,3 +1,4 @@
+using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using RestaurantAPI.BackgroudServices;
@@ -12,11 +13,6 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<EntityContext>(opt =>
-{
-    string connection = builder.Configuration.GetConnectionString("MySQL");
-    opt.UseMySql(connection, ServerVersion.AutoDetect(connection));
-});
 
 builder.Services.AddCors(options => options.AddPolicy(name: "restaurant", builder =>
 {
@@ -57,6 +53,12 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<EntityContext>();
+    dbContext.Database.EnsureCreated();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

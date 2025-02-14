@@ -18,7 +18,7 @@ namespace RestaurantAPI.Domain.Validator.User
                     return user != null;
                 })
                 .WithName("Login")
-                .WithMessage("Usuário/senha não encontrados!");
+                .WithMessage("Usuário/senha não encontrados");
         }
     }
 }

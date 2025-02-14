@@ -11,9 +11,13 @@ namespace RestaurantAPI.Domain.Validator.User
         {
             _userRepository = userRepository;
 
+            RuleFor(a => a.Name)
+                .NotEmpty()
+                .WithMessage("Nome não pode ser vazio!");
+            
             RuleFor(a => a.Email)
                 .EmailAddress()
-                .WithMessage("Email inválido!")
+                .WithMessage("Email inválido")
                 .MustAsync(async (email, cancellationToken) =>
                 {
                     return !await _userRepository.Exists(email);
@@ -22,11 +26,11 @@ namespace RestaurantAPI.Domain.Validator.User
 
             RuleFor(a => a.Password)
                 .NotEmpty()
-                .WithMessage("A senha não pode ser vazia!")
+                .WithMessage("A senha não pode ser vazia")
                 .MinimumLength(6)
-                .WithMessage("Senha deve conter ao menos 6 dígitos!")
+                .WithMessage("Senha deve conter ao menos 6 dígitos")
                 .Must(ValidateUpper)
-                .WithMessage("A senha deve conter ao menos uma letra maiúscula!")
+                .WithMessage("A senha deve conter ao menos uma letra maiúscula")
                 .WithName("Senha");
 
             RuleFor(a => new { a.Password, a.ConfirmPassword })

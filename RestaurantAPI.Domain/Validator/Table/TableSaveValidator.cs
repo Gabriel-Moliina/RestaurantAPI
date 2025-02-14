@@ -28,7 +28,7 @@ namespace RestaurantAPI.Domain.Validator.Table
                     return !(await _tableRepository.GetByIdentificationRestaurant(model.Identification, model.RestaurantId) != null);
                 })
                 .WithName("Identificação")
-                .WithMessage("Mesa já existente!");
+                .WithMessage("Mesa já existente");
             });
             
             When(a => a.Id != 0, () =>
@@ -41,7 +41,7 @@ namespace RestaurantAPI.Domain.Validator.Table
                     return tableExists;
                 })
                 .WithName("Identificação")
-                .WithMessage("Mesa já existente!");
+                .WithMessage("Mesa já existente");
             });
 
 
@@ -51,11 +51,11 @@ namespace RestaurantAPI.Domain.Validator.Table
                 {
                     return await _restaurantRepository.GetById(restaurantId) != null;
                 })
-                .WithMessage("Restaurante não encontrado!");
+                .WithMessage("Restaurante não encontrado");
 
             RuleFor(a => a.Capacity)
                 .NotEqual(0)
-                .WithMessage("A capcaidade da mesa não pode ser 0");
+                .WithMessage("A capacidade da mesa não pode ser 0");
         }
     }
 }

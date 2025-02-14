@@ -25,7 +25,7 @@ namespace RestaurantAPI.Domain.Validator.Table
                     var reservation = await _reservationRepository.GetByTableId(tableId);
                     return reservation != null;
                 })
-                .WithMessage("Nenhuma reserva encontrada para esta mesa!");
+                .WithMessage("Nenhuma reserva encontrada para esta mesa");
         }
     }
 }
