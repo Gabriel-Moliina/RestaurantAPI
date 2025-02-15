@@ -11,12 +11,12 @@ namespace RestaurantAPI.Application.Application
     public class TableApplication : BaseApplication, ITableApplication
     {
         private readonly IValidator<TableSaveDTO> _validatorTableCreate;
-        private readonly IValidator<TableChangeStatusDTO> _validatorTableChangeStatus;
+        private readonly IValidator<TableReleaseDTO> _validatorTableChangeStatus;
         private readonly ITableService _tableService;
         public TableApplication(INotification notification,
             ITableService tableService,
             IValidator<TableSaveDTO> validatorTableCreate,
-            IValidator<TableChangeStatusDTO> validatorTableChangeStatus
+            IValidator<TableReleaseDTO> validatorTableChangeStatus
             ) : base(notification)
         {
             _tableService = tableService;
@@ -38,7 +38,7 @@ namespace RestaurantAPI.Application.Application
         }
         public async Task<TableDTO> DeleteById(long id) => await _tableService.DeleteById(id);
 
-        public async Task<bool> Release(TableChangeStatusDTO dto)
+        public async Task<bool> Release(TableReleaseDTO dto)
         {
             _notification.AddNotifications(await _validatorTableChangeStatus.ValidateAsync(dto));
             if (_notification.HasNotifications) return false;

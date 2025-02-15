@@ -1,17 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using RestaurantAPI.Application.Application;
 using RestaurantAPI.Controllers.Base;
 using RestaurantAPI.Domain.DTO.Restaurant;
-using RestaurantAPI.Domain.DTO.User;
 using RestaurantAPI.Domain.Interface.Application;
 using RestaurantAPI.Domain.Interface.Notification;
 using RestaurantAPI.ViewModels;
 
 namespace RestaurantAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/restaurant")]
     [ApiController]
     [Authorize]
     public class RestaurantController : BaseController
@@ -23,12 +20,12 @@ namespace RestaurantAPI.Controllers
             _restaurantApplication = restaurantApplication;
         }
 
-        [HttpGet("GetByUserId/{userId}")]
+        [HttpGet("user/{userId}")]
         public Task<ActionResult<ResponseApiViewModel<List<RestaurantDTO>>>> GetByUserId(long userId)
         {
             return Execute(async () => await _restaurantApplication.GetByUserId(userId));
         }
-        
+
         [HttpGet("{id}")]
         public Task<ActionResult<ResponseApiViewModel<RestaurantDTO>>> GetById(long id)
         {

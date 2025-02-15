@@ -10,10 +10,6 @@ namespace RestaurantAPI.Domain.Validator.User
         public UserCreateValidator(IUserRepository userRepository)
         {
             _userRepository = userRepository;
-
-            RuleFor(a => a.Name)
-                .NotEmpty()
-                .WithMessage("Nome não pode ser vazio!");
             
             RuleFor(a => a.Email)
                 .EmailAddress()

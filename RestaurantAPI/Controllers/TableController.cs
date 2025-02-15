@@ -8,7 +8,7 @@ using RestaurantAPI.ViewModels;
 
 namespace RestaurantAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/table")]
     [ApiController]
     [Authorize]
     public class TableController : BaseController
@@ -27,7 +27,7 @@ namespace RestaurantAPI.Controllers
             return Execute(async () => await _tableApplication.GetById(id));
         }
 
-        [HttpGet("GetByRestaurantId/{restaurantId}")]
+        [HttpGet("restaurant/{restaurantId}")]
         public Task<ActionResult<ResponseApiViewModel<List<TableDTO>>>> GetByRestaurantId(long restaurantId)
         {
             return Execute(async () => await _tableApplication.GetByRestaurantId(restaurantId));
@@ -39,8 +39,8 @@ namespace RestaurantAPI.Controllers
             return Execute(async () => await _tableApplication.SaveOrUpdate(table));
         }
 
-        [HttpPost("Release")]
-        public Task<ActionResult<ResponseApiViewModel<bool>>> Release(TableChangeStatusDTO dto)
+        [HttpPost("release")]
+        public Task<ActionResult<ResponseApiViewModel<bool>>> Release(TableReleaseDTO dto)
         {
             return Execute(async () => await _tableApplication.Release(dto));
         }

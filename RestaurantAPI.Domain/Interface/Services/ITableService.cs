@@ -8,6 +8,6 @@ namespace RestaurantAPI.Domain.Interface.Services
         Task<List<TableDTO>> GetByRestaurantId(long restaurantId);
         Task<TableResponseDTO> SaveOrUpdate(TableSaveDTO dto);
         Task<TableDTO> DeleteById(long id);
-        Task<bool> Release(TableChangeStatusDTO dto);
+        Task<bool> Release(TableReleaseDTO dto);
     }
 }

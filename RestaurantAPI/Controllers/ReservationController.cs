@@ -9,7 +9,7 @@ using RestaurantAPI.ViewModels;
 
 namespace RestaurantAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/reservation")]
     [ApiController]
     [Authorize]
     public class ReservationController : BaseController

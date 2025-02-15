@@ -4,10 +4,10 @@ using RestaurantAPI.Domain.Interface.Repository;
 
 namespace RestaurantAPI.Domain.Validator.Table
 {
-    public class TableChangeStatusValidator : AbstractValidator<TableChangeStatusDTO>
+    public class TableReleaseValidator : AbstractValidator<TableReleaseDTO>
     {
         private readonly ITableRepository _tableRepository;
-        public TableChangeStatusValidator(ITableRepository tableRepository)
+        public TableReleaseValidator(ITableRepository tableRepository)
         {
             _tableRepository = tableRepository;
 

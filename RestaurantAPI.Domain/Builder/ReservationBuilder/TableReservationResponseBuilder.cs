@@ -1,5 +1,4 @@
-﻿using RestaurantAPI.Domain.DTO.Reservation;
-using RestaurantAPI.Domain.DTO.Table;
+﻿using RestaurantAPI.Domain.DTO.Table;
 using RestaurantAPI.Domain.Interface.Builder;
 
 namespace RestaurantAPI.Domain.Builder.ReservationBuilder

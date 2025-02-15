@@ -40,8 +40,6 @@ namespace RestaurantAPI.Application.Application
             _notification.AddNotifications(await _validatorReservation.ValidateAsync(dto));
             if (_notification.HasNotifications) return null;
 
-            dto.Date = TimeZoneInfo.ConvertTime(dto.Date, TimeZoneInfo.Local).ToLocalTime();
-
             using TransactionScope transactionScope = new(TransactionScopeAsyncFlowOption.Enabled);
             var table = await _reservationService.Create(dto);
             transactionScope.Complete();

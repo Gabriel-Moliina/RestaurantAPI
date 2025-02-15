@@ -33,6 +33,8 @@ namespace RestaurantAPI.Service.Services
             table.Reserved = true;
             await _tableRepository.Update(table);
 
+            dto.Date = TimeZoneInfo.ConvertTime(dto.Date, TimeZoneInfo.Local).ToLocalTime();
+
             Reservation reservation = _reservationBuilder.
                 WithDate(dto.Date).
                 WithEmail(dto.Email).

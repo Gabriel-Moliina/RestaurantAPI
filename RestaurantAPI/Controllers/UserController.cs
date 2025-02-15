@@ -8,7 +8,7 @@ using RestaurantAPI.ViewModels;
 
 namespace RestaurantAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/user")]
     [ApiController]
     public class UserController : BaseController
     {
@@ -19,13 +19,13 @@ namespace RestaurantAPI.Controllers
             _userApplication = userApplication;
         }
 
-        [HttpPost("Login")]
+        [HttpPost("login")]
         public Task<ActionResult<ResponseApiViewModel<UserLoginResponseDTO>>> Login([FromBody] UserLoginDTO user)
         {
             return Execute(async () => await _userApplication.Login(user));
         }
 
-        [HttpPost("Create")]
+        [HttpPost("create")]
         public Task<ActionResult<ResponseApiViewModel<UserCreateResponseDTO>>> Create([FromBody] UserCreateDTO user)
         {
             return Execute(async () => await _userApplication.Create(user));

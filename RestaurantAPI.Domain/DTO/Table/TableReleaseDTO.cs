@@ -1,6 +1,6 @@
 ﻿namespace RestaurantAPI.Domain.DTO.Table
 {
-    public class TableChangeStatusDTO
+    public class TableReleaseDTO
     {
         public long TableId { get; set; }
     }

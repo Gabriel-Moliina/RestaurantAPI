@@ -1,5 +1,3 @@
-using System;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using RestaurantAPI.BackgroudServices;
 using RestaurantAPI.Infra.Context;
@@ -34,7 +32,7 @@ builder.Services.AddSwaggerGen(c =>
         Scheme = "Bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
-        Description = "Example: \"Bearer 12345abcdef\"",
+        Description = "Exemplo: \"Bearer 12345abcdef\"",
     });
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
