@@ -65,10 +65,10 @@ namespace RestaurantAPI.Application.Application
             transactionScope.Complete();
 
             var email = _emailBuilder.WithName(table.RestaurantName).
-            WithSubject($"{table.RestaurantName} - Reserva Cancelada").
-            WithReceiver(table.Email).
-            WithMessage($"Olá, gostaria de informar que sua reserva para a mesa {table.Identification} foi CANCELADA no dia {table.Date:dd/MM/yyyy} às {table.Date:HH:mm}").
-            Build();
+                WithSubject($"{table.RestaurantName} - Reserva Cancelada").
+                WithReceiver(table.Email).
+                WithMessage($"Olá, gostaria de informar que sua reserva para a mesa {table.Identification} foi CANCELADA no dia {table.Date:dd/MM/yyyy} às {table.Date:HH:mm}").
+                Build();
 
             await _rabbitSender.SendMessage<EmailDTO>(email);
 

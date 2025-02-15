@@ -37,7 +37,8 @@ namespace RestaurantAPI.Service.Services
         {
             var user = await _userRepository.ValidateUser(dto.Email, dto.Password);
             var response = _mapper.Map<UserLoginResponseDTO>(user);
-            response.Token = _tokenService.Generate(response);
+
+            if(response != null) response.Token = _tokenService.Generate(response);
 
             return response;
         }
