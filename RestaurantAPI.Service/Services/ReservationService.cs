@@ -30,6 +30,9 @@ namespace RestaurantAPI.Service.Services
         public async Task<TableReservationResponseDTO> Create(TableReservationDTO dto)
         {
             var table = await _tableRepository.GetById(dto.TableId);
+            if (table == null) 
+                return null;
+
             table.Reserved = true;
             await _tableRepository.Update(table);
 

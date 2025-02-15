@@ -38,7 +38,6 @@ namespace RestaurantAPI.Service.Services
             return _mapper.Map<TableResponseDTO>(table);
         }
         public async Task<TableDTO> DeleteById(long id) => _mapper.Map<TableDTO>(await _tableRepository.DeleteById(id));
-
         public async Task<bool> Release(TableReleaseDTO dto)
         {
             var table = await _tableRepository.GetById(dto.TableId);

@@ -29,7 +29,7 @@ namespace RestaurantAPI.ServiceTests.Application
         }
 
         [Fact]
-        public async Task TestLogin_WithMockRepository()
+        public async Task TestLogin_Success()
         {
             var user = new User
             {
@@ -48,7 +48,7 @@ namespace RestaurantAPI.ServiceTests.Application
             var userDTO = new UserLoginDTO
             {
                 Email = "molina@molina.com",
-                Password = "Molina123"
+                Password = "Molina123".Crypt()
             };
 
             string token = "123456e";
@@ -59,7 +59,7 @@ namespace RestaurantAPI.ServiceTests.Application
 
             var response = await _userService.Login(userDTO);
 
-            Assert.Equal(1, response?.Id);
+            Assert.Equal(1, response.Id);
 
             _mockTokenService.Verify();
             _mockAutoMapper.Verify();
@@ -67,7 +67,7 @@ namespace RestaurantAPI.ServiceTests.Application
         }
 
         [Fact]
-        public async Task TestLogin_Failed_WithMockRepository()
+        public async Task TestLogin_Erro_WhenUserIsNull()
         {
             var userDTO = new UserLoginDTO
             {
