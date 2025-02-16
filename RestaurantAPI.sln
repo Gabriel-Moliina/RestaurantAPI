@@ -31,10 +31,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantAPI.Infra.Messagi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantAPI.Infra.Email", "RestaurantAPI.Email\RestaurantAPI.Infra.Email.csproj", "{2A536A68-239F-46C1-B07E-9589C3DE740A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "06.Test", "06.Test", "{E7EA2B89-25ED-414D-BA02-9C43432B4713}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantAPI.ServiceTests", "RestaurantAPI.ApplicationTests\RestaurantAPI.ServiceTests.csproj", "{98585F37-C28F-4334-B325-EE33D97B5718}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -77,10 +73,6 @@ Global
 		{2A536A68-239F-46C1-B07E-9589C3DE740A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A536A68-239F-46C1-B07E-9589C3DE740A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A536A68-239F-46C1-B07E-9589C3DE740A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{98585F37-C28F-4334-B325-EE33D97B5718}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{98585F37-C28F-4334-B325-EE33D97B5718}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{98585F37-C28F-4334-B325-EE33D97B5718}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{98585F37-C28F-4334-B325-EE33D97B5718}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,6 +87,5 @@ Global
 		{2FB83570-F5FF-4BB7-81D7-539B44BCEB68} = {EC5C8D39-1BDA-49C0-B312-2E3538FC21C2}
 		{5238B040-0EC0-4E3C-AA74-ED740307D3BC} = {EC5C8D39-1BDA-49C0-B312-2E3538FC21C2}
 		{2A536A68-239F-46C1-B07E-9589C3DE740A} = {EC5C8D39-1BDA-49C0-B312-2E3538FC21C2}
-		{98585F37-C28F-4334-B325-EE33D97B5718} = {E7EA2B89-25ED-414D-BA02-9C43432B4713}
 	EndGlobalSection
 EndGlobal
