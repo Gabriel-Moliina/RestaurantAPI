@@ -22,10 +22,6 @@ namespace RestaurantAPI.Service.Services
             _tokenService = tokenService;
         }
 
-        public async Task<List<UserDTO>> Get() => _mapper.Map<List<UserDTO>>(await _userRepository.Get());
-
-        public async Task<UserDTO> GetById(long id) => _mapper.Map<UserDTO>(await _userRepository.GetById(id));
-
         public async Task<UserCreateResponseDTO> Create(UserCreateDTO dto)
         {
             var user = _mapper.Map<User>(dto);

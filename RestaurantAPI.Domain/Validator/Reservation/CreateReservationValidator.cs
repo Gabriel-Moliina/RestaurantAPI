@@ -1,15 +1,18 @@
 ﻿using FluentValidation;
 using RestaurantAPI.Domain.DTO.Reservation;
 using RestaurantAPI.Domain.Interface.Repository;
+using RestaurantAPI.Domain.Interface.Token;
 
 namespace RestaurantAPI.Domain.Validator.Reservation
 {
     public class CreateReservationValidator : AbstractValidator<CreateReservationDTO>
     {
         private readonly ITableRepository _tableRepository;
-        public CreateReservationValidator(ITableRepository tableRepository)
+        private readonly ITokenService _tokenService;
+        public CreateReservationValidator(ITableRepository tableRepository, ITokenService tokenService)
         {
             _tableRepository = tableRepository;
+            _tokenService = tokenService;
 
             RuleFor(a => a.Email)
                 .EmailAddress()
@@ -18,13 +21,13 @@ namespace RestaurantAPI.Domain.Validator.Reservation
             RuleFor(a => a.TableId)
                 .MustAsync(async (tableId, cancellationToken) =>
                 {
-                    var table = await _tableRepository.GetById(tableId);
+                    var table = await _tableRepository.GetByIdAndUserId(tableId, _tokenService.GetUserId);
                     return table != null;
                 })
                 .WithMessage("A mesa não foi encontrada")
                 .MustAsync(async (tableId, cancellationToken) =>
                 {
-                    var table = await _tableRepository.GetById(tableId);
+                    var table = await _tableRepository.GetByIdAndUserId(tableId, _tokenService.GetUserId);
                     return !(table?.Reserved ?? false);
                 })
                 .WithMessage("A mesa não está disponível para reserva");

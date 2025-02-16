@@ -18,19 +18,19 @@ namespace RestaurantAPI.Service.Services
             ITokenService tokenService,
             IMapper mapper) : base(mapper)
         {
-            _restaurantRepository = restaurantRepository;
             _tokenService = tokenService;
+            _restaurantRepository = restaurantRepository;
         }
 
         public async Task<List<RestaurantDTO>> GetByUserId(long id) => _mapper.Map<List<RestaurantDTO>>(await _restaurantRepository.GetByUserId(id));
-        public async Task<RestaurantDTO> GetById(long restaurantId) => _mapper.Map<RestaurantDTO>(await _restaurantRepository.GetById(restaurantId));
+        public async Task<RestaurantDTO> GetByIdAndUserId(long restaurantId, long userId) => _mapper.Map<RestaurantDTO>(await _restaurantRepository.GetByIdAndUserId(restaurantId, userId));
         public async Task<RestaurantDTO> SaveOrUpdate(RestaurantSaveDTO dto)
         {
             var restaurant = _mapper.Map<Restaurant>(dto);
             if (restaurant == null) 
                 return null;
 
-            restaurant.UserId = _tokenService.GetUser().Id;
+            restaurant.UserId = _tokenService.GetUserId;
 
             if (restaurant.Id == 0)
                 await _restaurantRepository.Add(restaurant);

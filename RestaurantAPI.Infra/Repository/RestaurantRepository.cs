@@ -12,11 +12,15 @@ namespace RestaurantAPI.Infra.Repository
         {
         }
 
+        public async Task<Restaurant> GetByIdAndUserId(long id, long userId) =>
+            await _dbSet.FirstOrDefaultAsync(e => e.Id == id && e.UserId == userId);
+
         public async Task<List<Restaurant>> GetByUserId(long userId) => 
             await _dbSet.Where(e => e.UserId == userId)
                 .ToListAsync();
 
-        public async Task<bool> Exists(string name, long userId) => await _dbSet.AnyAsync(e => e.Name == name && e.UserId == userId);
+        public async Task<bool> ExistsByNameAndUserId(string name, long userId) => await _dbSet.AnyAsync(e => e.Name == name && e.UserId == userId);
         public async Task<bool> ExistsWithDiffId(string name, long userId, long restaurantId) => await _dbSet.AnyAsync(e => e.Name == name && e.UserId == userId && e.Id != restaurantId);
+        public async Task<bool> ExistsByIdAndUserId(long id, long userId) => await _dbSet.AnyAsync(e => e.Id == id && e.UserId == userId);
     }
 }

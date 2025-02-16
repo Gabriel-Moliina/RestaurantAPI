@@ -25,9 +25,9 @@ namespace RestaurantAPI.Domain.Validator.Restaurant
                 RuleFor(a => a.Name)
                 .MustAsync(async (name, model, cancellationToken) =>
                 {
-                    return !await _restaurantRepository.Exists(model, _tokenService.GetUser().Id);
+                    return !await _restaurantRepository.ExistsByNameAndUserId(model, _tokenService.GetUserId);
                 })
-                .WithName("Identificação")
+                .WithName("Name")
                 .WithMessage("Restaurante já existente");
             });
 
@@ -36,10 +36,16 @@ namespace RestaurantAPI.Domain.Validator.Restaurant
                 RuleFor(a => a.Name)
                 .MustAsync(async (model, name, cancellationToken) =>
                 {
-                    return !await _restaurantRepository.ExistsWithDiffId(name, _tokenService.GetUser().Id, model.Id);
+                    return !await _restaurantRepository.ExistsWithDiffId(name, _tokenService.GetUserId, model.Id);
                 })
-                .WithName("Identificação")
-                .WithMessage("Restaurante já existente");
+                .WithName("Name")
+                .WithMessage("Restaurante já existente")
+                .MustAsync(async (model, name, cancellationToken) =>
+                {
+                    return await _restaurantRepository.ExistsByIdAndUserId(model.Id, _tokenService.GetUserId);
+                })
+                .WithName("Name")
+                .WithMessage("Restaurante não encontrado");
             });
         }
     }

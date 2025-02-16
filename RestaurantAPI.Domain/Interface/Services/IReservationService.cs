@@ -5,7 +5,7 @@ namespace RestaurantAPI.Domain.Interface.Services
 {
     public interface IReservationService
     {
-        Task<ReservationDTO> GetById(long id);
+        Task<ReservationDTO> GetByIdAndUserId(long id, long userId);
         Task<CreateReservationResponseDTO> Create(CreateReservationDTO dto);
         Task<CreateReservationResponseDTO> Cancel(long reservationId);
     }

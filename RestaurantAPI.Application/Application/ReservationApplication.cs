@@ -7,6 +7,7 @@ using RestaurantAPI.Domain.Interface.Builder;
 using RestaurantAPI.Domain.Interface.Messaging;
 using RestaurantAPI.Domain.Interface.Notification;
 using RestaurantAPI.Domain.Interface.Services;
+using RestaurantAPI.Domain.Interface.Token;
 
 namespace RestaurantAPI.Application.Application
 {
@@ -18,11 +19,13 @@ namespace RestaurantAPI.Application.Application
         private readonly IReservationService _reservationService;
         private readonly INotification _notification;
         private readonly IEmailBuilder _emailBuilder;
+        private readonly ITokenService _tokenService;
         public ReservationApplication(IRabbitMQSender rabbitSender,
             IReservationService reservationService,
             INotification notification,
             IValidator<CreateReservationDTO> validatorReservation,
             IValidator<TableCancelReservationDTO> validatorCancelTableReservation,
+            ITokenService tokenService,
             IEmailBuilder emailBuilder
             )
         {
@@ -32,9 +35,10 @@ namespace RestaurantAPI.Application.Application
             _validatorCancelReservation = validatorCancelTableReservation;
             _notification = notification;
             _emailBuilder = emailBuilder;
+            _tokenService = tokenService;
         }
 
-        public async Task<ReservationDTO> GetById(long id) => await _reservationService.GetById(id);
+        public async Task<ReservationDTO> GetById(long id) => await _reservationService.GetByIdAndUserId(id, _tokenService.GetUserId);
 
         public async Task<CreateReservationResponseDTO> Create(CreateReservationDTO dto)
         {
@@ -45,10 +49,12 @@ namespace RestaurantAPI.Application.Application
             var table = await _reservationService.Create(dto);
             transactionScope.Complete();
 
+            var dateLocal = TimeZoneInfo.ConvertTime(table.Date, TimeZoneInfo.Local).ToLocalTime();
+
             var email = _emailBuilder.WithName(table.RestaurantName).
                 WithSubject($"{table.RestaurantName} - Reserva Confirmada").
                 WithReceiver(table.Email).
-                WithMessage($"Olá, gostaria de informar que sua reserva para a mesa {table.Identification} foi CONFIRMADA no dia {table.Date:dd/MM/yyyy} às {table.Date:HH:mm}").
+                WithMessage($"Olá, gostaria de informar que sua reserva para a mesa {table.Identification} foi CONFIRMADA no dia {dateLocal:dd/MM/yyyy} às {dateLocal:HH:mm}").
                 Build();
 
             await _rabbitSender.SendMessage<EmailDTO>(email);
@@ -65,10 +71,12 @@ namespace RestaurantAPI.Application.Application
             var table = await _reservationService.Cancel(tableId);
             transactionScope.Complete();
 
+            var dateLocal = TimeZoneInfo.ConvertTimeFromUtc(table.Date, TimeZoneInfo.Local).ToLocalTime();
+
             var email = _emailBuilder.WithName(table.RestaurantName).
                 WithSubject($"{table.RestaurantName} - Reserva Cancelada").
                 WithReceiver(table.Email).
-                WithMessage($"Olá, gostaria de informar que sua reserva para a mesa {table.Identification} foi CANCELADA no dia {table.Date:dd/MM/yyyy} às {table.Date:HH:mm}").
+                WithMessage($"Olá, gostaria de informar que sua reserva para a mesa {table.Identification} foi CANCELADA no dia {dateLocal:dd/MM/yyyy} às {dateLocal:HH:mm}").
                 Build();
 
             await _rabbitSender.SendMessage<EmailDTO>(email);

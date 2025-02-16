@@ -72,7 +72,7 @@ namespace RestaurantAPI.ServiceTests.Service
             _mockReservationBuilder.Setup(builder => builder.WithTableId(It.IsAny<long>())).Returns(_mockReservationBuilder.Object).Verifiable();
             _mockReservationBuilder.Setup(builder => builder.Build()).Returns(reservation).Verifiable();
 
-            SetupTableReservationResponseBuilder();
+            SetupTableReservationResponseBuilder(true);
 
             var response = await _reservationService.Create(reservationDto);
 
@@ -115,7 +115,7 @@ namespace RestaurantAPI.ServiceTests.Service
                 Capacity = 1,
                 Identification = "22",
                 RestaurantId = 1,
-                Reserved = false,
+                Reserved = true,
                 Restaurant = restaurant
             };
 
@@ -129,7 +129,7 @@ namespace RestaurantAPI.ServiceTests.Service
             _mockTableRepository.Setup(c => c.GetById(It.IsAny<long>())).ReturnsAsync(table).Verifiable();
             _mockReservationRepository.Setup(c => c.GetByTableId(It.IsAny<long>())).ReturnsAsync(reservation).Verifiable();
 
-            SetupTableReservationResponseBuilder();
+            SetupTableReservationResponseBuilder(false);
 
             var response = await _reservationService.Cancel(It.IsAny<long>());
 
@@ -152,24 +152,24 @@ namespace RestaurantAPI.ServiceTests.Service
             _mockTableRepository.Verify();
         }
 
-        private CreateReservationResponseDTO CreateTableReservationResponseDTO() =>
+        private CreateReservationResponseDTO CreateTableReservationResponseDTO(bool reserved) =>
             new CreateReservationResponseDTO
             {
                 Date = DateTime.MinValue,
                 Email = "teste@teste.com",
                 Identification = "123",
-                Reserved = true,
+                Reserved = reserved,
                 RestaurantName = "Restaurant Name"
             };
 
-        private void SetupTableReservationResponseBuilder()
+        private void SetupTableReservationResponseBuilder(bool reserved)
         {
             _mockTableReservationResponseBuilder.Setup(builder => builder.WithDate(It.IsAny<DateTime>())).Returns(_mockTableReservationResponseBuilder.Object).Verifiable();
             _mockTableReservationResponseBuilder.Setup(builder => builder.WithEmail(It.IsAny<string>())).Returns(_mockTableReservationResponseBuilder.Object).Verifiable();
             _mockTableReservationResponseBuilder.Setup(builder => builder.WithIdentification(It.IsAny<string>())).Returns(_mockTableReservationResponseBuilder.Object).Verifiable();
             _mockTableReservationResponseBuilder.Setup(builder => builder.WithReserved(It.IsAny<bool>())).Returns(_mockTableReservationResponseBuilder.Object).Verifiable();
             _mockTableReservationResponseBuilder.Setup(builder => builder.WithRestaurantName(It.IsAny<string>())).Returns(_mockTableReservationResponseBuilder.Object).Verifiable();
-            _mockTableReservationResponseBuilder.Setup(builder => builder.Build()).Returns(CreateTableReservationResponseDTO()).Verifiable();
+            _mockTableReservationResponseBuilder.Setup(builder => builder.Build()).Returns(CreateTableReservationResponseDTO(reserved)).Verifiable();
         }
     }
 }

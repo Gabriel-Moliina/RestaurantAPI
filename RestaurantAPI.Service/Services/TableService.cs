@@ -19,8 +19,8 @@ namespace RestaurantAPI.Service.Services
             _reservationRepository = reservationRepository;
         }
 
-        public async Task<TableDTO> GetById(long id) => _mapper.Map<TableDTO>(await _tableRepository.GetById(id));
-        public async Task<List<TableDTO>> GetByRestaurantId(long restaurantId) => _mapper.Map<List<TableDTO>>(await _tableRepository.GetByRestaurantId(restaurantId));
+        public async Task<TableDTO> GetByIdAndUserId(long id, long userId) => _mapper.Map<TableDTO>(await _tableRepository.GetByIdAndUserId(id, userId));
+        public async Task<List<TableDTO>> GetByRestaurantIdAndUserId(long restaurantId, long userId) => _mapper.Map<List<TableDTO>>(await _tableRepository.GetByRestaurantIdAndUserId(restaurantId, userId));
         public async Task<TableResponseDTO> SaveOrUpdate(TableSaveDTO dto)
         {
             if (dto == null)

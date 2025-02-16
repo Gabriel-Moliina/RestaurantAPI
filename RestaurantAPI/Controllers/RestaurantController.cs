@@ -21,9 +21,9 @@ namespace RestaurantAPI.Controllers
         }
 
         [HttpGet("user/{userId}")]
-        public Task<ActionResult<ResponseApiViewModel<List<RestaurantDTO>>>> GetByUserId(long userId)
+        public Task<ActionResult<ResponseApiViewModel<List<RestaurantDTO>>>> Get()
         {
-            return Execute(async () => await _restaurantApplication.GetByUserId(userId));
+            return Execute(async () => await _restaurantApplication.Get());
         }
 
         [HttpGet("{id}")]

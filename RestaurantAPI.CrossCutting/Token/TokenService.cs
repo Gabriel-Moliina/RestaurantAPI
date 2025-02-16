@@ -47,7 +47,7 @@ namespace RestaurantAPI.Infra.Security.Token
             return tokenHandler.WriteToken(token);
         }
 
-        public UserDTO GetUser()
+        private UserDTO GetUser()
         {
             var user = _httpContextAccessor.HttpContext.User;
 
@@ -57,5 +57,7 @@ namespace RestaurantAPI.Infra.Security.Token
                 Email = user.FindFirst(ClaimTypes.Email)?.Value
             };
         }
+
+        public long GetUserId => GetUser().Id;
     }
 }

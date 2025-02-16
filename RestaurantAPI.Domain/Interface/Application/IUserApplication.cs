@@ -4,8 +4,6 @@ namespace RestaurantAPI.Domain.Interface.Application
 {
     public interface IUserApplication
     {
-        Task<List<UserDTO>> Get();
-        Task<UserDTO> GetById(long id);
         Task<UserCreateResponseDTO> Create(UserCreateDTO dto);
         Task<UserLoginResponseDTO> Login(UserLoginDTO dto);
     }

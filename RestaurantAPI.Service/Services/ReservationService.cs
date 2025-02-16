@@ -26,7 +26,7 @@ namespace RestaurantAPI.Service.Services
             _reservationRepository = reservationRepository;
         }
 
-        public async Task<ReservationDTO> GetById(long id) => _mapper.Map<ReservationDTO>(await _reservationRepository.GetById(id));
+        public async Task<ReservationDTO> GetByIdAndUserId(long id, long userId) => _mapper.Map<ReservationDTO>(await _reservationRepository.GetByIdAndUserId(id, userId));
 
         public async Task<CreateReservationResponseDTO> Create(CreateReservationDTO dto)
         {
@@ -36,8 +36,6 @@ namespace RestaurantAPI.Service.Services
 
             table.Reserved = true;
             await _tableRepository.Update(table);
-
-            dto.Date = TimeZoneInfo.ConvertTime(dto.Date, TimeZoneInfo.Local).ToLocalTime();
 
             Reservation reservation = _reservationBuilder.
                 WithDate(dto.Date).

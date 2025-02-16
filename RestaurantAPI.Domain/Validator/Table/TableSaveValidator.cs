@@ -10,13 +10,16 @@ namespace RestaurantAPI.Domain.Validator.Table
         private readonly ITableRepository _tableRepository;
         private readonly IRestaurantRepository _restaurantRepository;
         private readonly IReservationRepository _reservationRepository;
+        private readonly ITokenService _tokenService;
         public TableSaveValidator(ITableRepository tableRepository,
             IRestaurantRepository restaurantRepository,
-            IReservationRepository reservationRepository)
+            IReservationRepository reservationRepository,
+            ITokenService tokenService)
         {
             _tableRepository = tableRepository;
             _restaurantRepository = restaurantRepository;
             _reservationRepository = reservationRepository;
+            _tokenService = tokenService;
 
             RuleFor(a => a.Identification)
                 .NotEmpty()
@@ -26,7 +29,7 @@ namespace RestaurantAPI.Domain.Validator.Table
             RuleFor(a => a.Id)
                 .MustAsync(async (model, id, cancellationToken) =>
                 {
-                    return !await _reservationRepository.ExistByTableId(id);
+                    return !await _reservationRepository.ExistByTableIdAndUserId(id, _tokenService.GetUserId);
                 })
                 .WithName("Reservation")
                 .WithMessage("Mesa reservada, cancele a reserva ou libere a mesa antes de alterá-la");
@@ -36,7 +39,7 @@ namespace RestaurantAPI.Domain.Validator.Table
                 RuleFor(a => a.Identification)
                 .MustAsync(async (model, identification, cancellationToken) =>
                 {
-                    return await _tableRepository.GetByIdentificationRestaurant(model.Identification, model.RestaurantId) == null;
+                    return await _tableRepository.GetByIdentificationRestaurantAndUserId(model.Identification, model.RestaurantId, _tokenService.GetUserId) == null;
                 })
                 .WithName("Identification")
                 .WithMessage("Mesa já existente");
@@ -47,18 +50,24 @@ namespace RestaurantAPI.Domain.Validator.Table
                 RuleFor(a => a.Identification)
                 .MustAsync(async (model, identification, cancellationToken) =>
                 {
-                    var tableExists = await _tableRepository.GetByIdentificationRestaurantWithDiffId(model.Identification, model.RestaurantId, model.Id) == null;
+                    var tableExists = await _tableRepository.GetByIdentificationRestaurantWithDiffIdAndUserId(model.Identification, model.RestaurantId, model.Id, _tokenService.GetUserId) == null;
 
                     return tableExists;
                 })
                 .WithName("Identification")
-                .WithMessage("Mesa já existente");
+                .WithMessage("Mesa já existente")
+                .MustAsync(async (model, identification, cancellationToken) =>
+                {
+                    return await _tableRepository.ExistsByIdAndUserId(model.Id, model.RestaurantId, _tokenService.GetUserId);
+                })
+                .WithName("Identification")
+                .WithMessage("Mesa não encontrada");
             });
 
             RuleFor(a => a.RestaurantId)
                 .MustAsync(async (restaurantId, cancellationToken) =>
                 {
-                    return await _restaurantRepository.GetById(restaurantId) != null;
+                    return await _restaurantRepository.GetByIdAndUserId(restaurantId, _tokenService.GetUserId) != null;
                 })
                 .WithMessage("Restaurante não encontrado");
 

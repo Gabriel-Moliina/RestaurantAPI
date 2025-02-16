@@ -6,6 +6,7 @@ using RestaurantAPI.Domain.DTO.Table;
 using RestaurantAPI.Domain.Interface.Application;
 using RestaurantAPI.Domain.Interface.Notification;
 using RestaurantAPI.Domain.Interface.Services;
+using RestaurantAPI.Domain.Interface.Token;
 
 namespace RestaurantAPI.Application.Application
 {
@@ -15,21 +16,24 @@ namespace RestaurantAPI.Application.Application
         private readonly IValidator<TableReleaseDTO> _validatorTableChangeStatus;
         private readonly IValidator<TableDeleteDTO> _validatorTableDelete;
         private readonly ITableService _tableService;
+        private readonly ITokenService _tokenService;
         public TableApplication(INotification notification,
             ITableService tableService,
             IValidator<TableSaveDTO> validatorTableCreate,
             IValidator<TableReleaseDTO> validatorTableChangeStatus,
-            IValidator<TableDeleteDTO> validatorTableDelete
+            IValidator<TableDeleteDTO> validatorTableDelete,
+            ITokenService tokenService
             ) : base(notification)
         {
             _tableService = tableService;
             _validatorTableCreate = validatorTableCreate;
             _validatorTableChangeStatus = validatorTableChangeStatus;
             _validatorTableDelete = validatorTableDelete;
+            _tokenService = tokenService;
         }
 
-        public async Task<TableDTO> GetById(long id) => await _tableService.GetById(id);
-        public async Task<List<TableDTO>> GetByRestaurantId(long restaurantId) => await _tableService.GetByRestaurantId(restaurantId);
+        public async Task<TableDTO> GetById(long id) => await _tableService.GetByIdAndUserId(id, _tokenService.GetUserId);
+        public async Task<List<TableDTO>> GetByRestaurantId(long restaurantId) => await _tableService.GetByRestaurantIdAndUserId(restaurantId, _tokenService.GetUserId);
         public async Task<TableResponseDTO> SaveOrUpdate(TableSaveDTO dto)
         {
             _notification.AddNotifications(await _validatorTableCreate.ValidateAsync(dto));
