@@ -20,7 +20,7 @@ namespace RestaurantAPI.Controllers
             _restaurantApplication = restaurantApplication;
         }
 
-        [HttpGet("user/{userId}")]
+        [HttpGet]
         public Task<ActionResult<ResponseApiViewModel<List<RestaurantDTO>>>> Get()
         {
             return Execute(async () => await _restaurantApplication.Get());
