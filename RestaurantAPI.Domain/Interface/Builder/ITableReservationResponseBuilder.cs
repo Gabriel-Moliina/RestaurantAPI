@@ -5,10 +5,10 @@ namespace RestaurantAPI.Domain.Interface.Builder
 {
     public interface ITableReservationResponseBuilder : IBaseBuilder<TableReservationResponseDTO>
     {
-        TableReservationResponseBuilder WithRestaurantName(string restaurantName);
-        TableReservationResponseBuilder WithIdentification(string identification);
-        TableReservationResponseBuilder WithEmail(string email);
-        TableReservationResponseBuilder WithDate(DateTime date);
-        TableReservationResponseBuilder WithReserved(bool reserved);
+        ITableReservationResponseBuilder WithRestaurantName(string restaurantName);
+        ITableReservationResponseBuilder WithIdentification(string identification);
+        ITableReservationResponseBuilder WithEmail(string email);
+        ITableReservationResponseBuilder WithDate(DateTime date);
+        ITableReservationResponseBuilder WithReserved(bool reserved);
     }
 }

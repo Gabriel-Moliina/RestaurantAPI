@@ -25,7 +25,7 @@ namespace RestaurantAPI.Domain.Validator.Table
                 RuleFor(a => a.Identification)
                 .MustAsync(async (model, identification, cancellationToken) =>
                 {
-                    return !(await _tableRepository.GetByIdentificationRestaurant(model.Identification, model.RestaurantId) != null);
+                    return await _tableRepository.GetByIdentificationRestaurant(model.Identification, model.RestaurantId) == null;
                 })
                 .WithName("Identificação")
                 .WithMessage("Mesa já existente");

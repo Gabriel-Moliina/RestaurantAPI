@@ -11,31 +11,34 @@ namespace RestaurantAPI.Domain.Builder.ReservationBuilder
             _tableReservation = new TableReservationResponseDTO();
         }
 
-        public TableReservationResponseBuilder WithRestaurantName(string restaurantName)
+        public ITableReservationResponseBuilder WithRestaurantName(string restaurantName)
         {
             _tableReservation.RestaurantName = restaurantName;
             return this;
         }
-        public TableReservationResponseBuilder WithIdentification(string identification)
+        public ITableReservationResponseBuilder WithIdentification(string identification)
         {
             _tableReservation.Identification = identification;
             return this;
         }
-        public TableReservationResponseBuilder WithEmail(string email)
+        public ITableReservationResponseBuilder WithEmail(string email)
         {
             _tableReservation.Email = email;
             return this;
         }
-        public TableReservationResponseBuilder WithDate(DateTime date)
+        public ITableReservationResponseBuilder WithDate(DateTime date)
         {
             _tableReservation.Date = date;
             return this;
         }
-        public TableReservationResponseBuilder WithReserved(bool reserved)
+        public ITableReservationResponseBuilder WithReserved(bool reserved)
         {
             _tableReservation.Reserved = reserved;
             return this;
         }
-        public TableReservationResponseDTO Build() =>_tableReservation;
+        public TableReservationResponseDTO Build()
+        {
+            return _tableReservation;
+        }
     }
 }

@@ -11,22 +11,22 @@ namespace RestaurantAPI.Domain.Builder.ReservationBuilder
             _reservation = new Reservation();
         }
 
-        public ReservationBuilder WithEmail(string email)
+        public IReservationBuilder WithEmail(string email)
         {
             _reservation.Email = email;
             return this;
         }
-        public ReservationBuilder WithDate(DateTime date)
+        public IReservationBuilder WithDate(DateTime date)
         {
             _reservation.Date = date;
             return this;
         }
-        public ReservationBuilder WithTableId(long tableId)
+        public IReservationBuilder WithTableId(long tableId)
         {
             _reservation.TableId = tableId;
             return this;
         }
-        public ReservationBuilder WithTable(Table table)
+        public IReservationBuilder WithTable(Table table)
         {
             _reservation.Table = table;
             return this;

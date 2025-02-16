@@ -60,7 +60,12 @@ namespace RestaurantAPI.Service.Services
         public async Task<TableReservationResponseDTO> Cancel(long tableId)
         {
             var table = await _tableRepository.GetById(tableId);
+            if(table == null) 
+                return null;
+
             var reservation = await _reservationRepository.GetByTableId(tableId);
+            if(reservation == null) 
+                return null;
 
             table.Reserved = false;
             TableReservationResponseDTO reseponse = _tableReservationResponseBuilder.

@@ -8,7 +8,7 @@ namespace RestaurantAPI.Domain.Mapper
     {
         public RestaurantMapper()
         {
-            CreateMap<RestaurantCreateDTO, Restaurant>();
+            CreateMap<RestaurantSaveDTO, Restaurant>();
             CreateMap<Restaurant, RestaurantDTO>();
             CreateMap<Restaurant, RestaurantDTO>()
                 .ForMember(x => x.Tables, y => y.MapFrom(x => x.Tables));

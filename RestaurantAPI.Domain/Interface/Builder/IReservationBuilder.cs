@@ -5,9 +5,9 @@ namespace RestaurantAPI.Domain.Interface.Builder
 {
     public interface IReservationBuilder : IBaseBuilder<Reservation>
     {
-        ReservationBuilder WithEmail(string email);
-        ReservationBuilder WithDate(DateTime date);
-        ReservationBuilder WithTableId(long tableId);
-        ReservationBuilder WithTable(Table table);
+        IReservationBuilder WithEmail(string email);
+        IReservationBuilder WithDate(DateTime date);
+        IReservationBuilder WithTableId(long tableId);
+        IReservationBuilder WithTable(Table table);
     }
 }

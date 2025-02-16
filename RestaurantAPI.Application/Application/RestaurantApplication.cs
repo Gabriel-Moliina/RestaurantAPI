@@ -11,11 +11,11 @@ namespace RestaurantAPI.Application.Application
     public class RestaurantApplication : BaseApplication, IRestaurantApplication
     {
         private readonly IRestaurantService _restaurantService;
-        private readonly IValidator<RestaurantCreateDTO> _validatorRestaurantCreate;
+        private readonly IValidator<RestaurantSaveDTO> _validatorRestaurantCreate;
         private readonly IValidator<RestaurantDeleteDTO> _validatorRestaurantDelete;
         public RestaurantApplication(INotification notification,
             IRestaurantService restaurantService,
-            IValidator<RestaurantCreateDTO> validatorRestaurantCreate,
+            IValidator<RestaurantSaveDTO> validatorRestaurantCreate,
             IValidator<RestaurantDeleteDTO> validatorRestaurantDelete
             ) : base(notification)
         {
@@ -26,7 +26,7 @@ namespace RestaurantAPI.Application.Application
 
         public async Task<List<RestaurantDTO>> GetByUserId(long userId) => await _restaurantService.GetByUserId(userId);
         public async Task<RestaurantDTO> GetById(long restaurantId) => await _restaurantService.GetById(restaurantId);
-        public async Task<RestaurantDTO> SaveOrUpdate(RestaurantCreateDTO dto)
+        public async Task<RestaurantDTO> SaveOrUpdate(RestaurantSaveDTO dto)
         {
             _notification.AddNotifications(await _validatorRestaurantCreate.ValidateAsync(dto));
             if (_notification.HasNotifications) return null;

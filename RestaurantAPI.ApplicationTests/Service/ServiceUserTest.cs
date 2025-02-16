@@ -53,13 +53,14 @@ namespace RestaurantAPI.ServiceTests.Application
 
             string token = "123456e";
 
-            _mockTokenService.Setup(c => c.Generate(userLoginResponseDTO)).Returns(token).Verifiable();
-            _mockAutoMapper.Setup(c => c.Map<UserLoginResponseDTO>(user)).Returns(userLoginResponseDTO).Verifiable();
-            _mockUserRepository.Setup(c => c.ValidateUser(userDTO.Email, userDTO.Password)).ReturnsAsync(user).Verifiable();
+            _mockTokenService.Setup(c => c.Generate(It.IsAny<UserLoginResponseDTO>())).Returns(token).Verifiable();
+            _mockAutoMapper.Setup(c => c.Map<UserLoginResponseDTO>(It.IsAny<User>())).Returns(userLoginResponseDTO).Verifiable();
+            _mockUserRepository.Setup(c => c.ValidateUser(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(user).Verifiable();
 
             var response = await _userService.Login(userDTO);
 
-            Assert.Equal(1, response.Id);
+            Assert.Equal(1, response?.Id);
+            Assert.NotEmpty(response?.Token);
 
             _mockTokenService.Verify();
             _mockAutoMapper.Verify();
@@ -67,7 +68,7 @@ namespace RestaurantAPI.ServiceTests.Application
         }
 
         [Fact]
-        public async Task TestLogin_Erro_WhenUserIsNull()
+        public async Task TestLogin_WhenUserIsNull_Erro()
         {
             var userDTO = new UserLoginDTO
             {
@@ -76,7 +77,7 @@ namespace RestaurantAPI.ServiceTests.Application
             };
 
             _mockAutoMapper.Setup(c => c.Map<UserLoginResponseDTO>(null)).Returns((UserLoginResponseDTO)null).Verifiable();
-            _mockUserRepository.Setup(c => c.ValidateUser(userDTO.Email, userDTO.Password)).ReturnsAsync((User)null).Verifiable();
+            _mockUserRepository.Setup(c => c.ValidateUser(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync((User)null).Verifiable();
 
             var response = await _userService.Login(userDTO);
 

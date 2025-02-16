@@ -33,7 +33,7 @@ namespace RestaurantAPI.Controllers
         }
 
         [HttpPost]
-        public Task<ActionResult<ResponseApiViewModel<RestaurantDTO>>> SaveOrUpdate([FromBody] RestaurantCreateDTO restaurant)
+        public Task<ActionResult<ResponseApiViewModel<RestaurantDTO>>> SaveOrUpdate([FromBody] RestaurantSaveDTO restaurant)
         {
             return Execute(async () => await _restaurantApplication.SaveOrUpdate(restaurant));
         }

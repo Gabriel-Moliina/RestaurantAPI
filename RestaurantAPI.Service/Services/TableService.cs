@@ -23,15 +23,12 @@ namespace RestaurantAPI.Service.Services
         public async Task<List<TableDTO>> GetByRestaurantId(long restaurantId) => _mapper.Map<List<TableDTO>>(await _tableRepository.GetByRestaurantId(restaurantId));
         public async Task<TableResponseDTO> SaveOrUpdate(TableSaveDTO dto)
         {
-            var table = await _tableRepository.GetById(dto.Id) ?? new Table();
-            table.Capacity = dto.Capacity;
-            table.Identification = dto.Identification;
+            var table = _mapper.Map<Table>(dto);
+            if (table == null)
+                return null;
 
             if (dto.Id == 0)
-            {
-                table.RestaurantId = dto.RestaurantId;
                 await _tableRepository.Add(table);
-            }
             else
                 await _tableRepository.Update(table);
 

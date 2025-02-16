@@ -8,5 +8,6 @@ namespace RestaurantAPI.Domain.Interface.Repository
     {
         Task<List<Restaurant>> GetByUserId(long userId);
         Task<bool> Exists(string name, long userId);
+        Task<bool> ExistsWithDiffId(string name, long userId, long restaurantId);
     }
 }
