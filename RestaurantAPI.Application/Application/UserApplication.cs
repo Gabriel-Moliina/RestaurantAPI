@@ -29,7 +29,7 @@ namespace RestaurantAPI.Application.Application
             _notification.AddNotifications(await _validatorUserCreate.ValidateAsync(dto));
             if (_notification.HasNotifications) return null;
 
-            using TransactionScope transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+            using TransactionScope transactionScope = GetTransactionScopeAsyncEnabled();
             var response = await _userService.Create(dto);
             transactionScope.Complete();
             return response;

@@ -1,5 +1,4 @@
-﻿using System.Xml.Linq;
-using FluentValidation;
+﻿using FluentValidation;
 using RestaurantAPI.Domain.DTO.Restaurant;
 using RestaurantAPI.Domain.Interface.Repository;
 using RestaurantAPI.Domain.Interface.Token;
@@ -23,9 +22,9 @@ namespace RestaurantAPI.Domain.Validator.Restaurant
             When(a => a.Id == 0, () =>
             {
                 RuleFor(a => a.Name)
-                .MustAsync(async (name, model, cancellationToken) =>
+                .MustAsync(async (model, name, cancellationToken) =>
                 {
-                    return !await _restaurantRepository.ExistsByNameAndUserId(model, _tokenService.GetUserId);
+                    return !await _restaurantRepository.ExistsByNameAndUserId(name, _tokenService.GetUserId);
                 })
                 .WithName("Name")
                 .WithMessage("Restaurante já existente");

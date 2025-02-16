@@ -35,7 +35,7 @@ namespace RestaurantAPI.Application.Application
             _notification.AddNotifications(await _validatorRestaurantCreate.ValidateAsync(dto));
             if (_notification.HasNotifications) return null;
 
-            using TransactionScope transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+            using TransactionScope transactionScope = GetTransactionScopeAsyncEnabled();
             var response = await _restaurantService.SaveOrUpdate(dto);
             transactionScope.Complete();
             return response;
@@ -45,7 +45,7 @@ namespace RestaurantAPI.Application.Application
             _notification.AddNotifications(await _validatorRestaurantDelete.ValidateAsync(new RestaurantDeleteDTO(id)));
             if (_notification.HasNotifications) return null;
 
-            using TransactionScope transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+            using TransactionScope transactionScope = GetTransactionScopeAsyncEnabled();
             var restaurant = await _restaurantService.DeleteById(id);
             transactionScope.Complete();
             return restaurant;

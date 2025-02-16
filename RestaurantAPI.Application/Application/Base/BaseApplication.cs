@@ -1,4 +1,5 @@
-﻿using RestaurantAPI.Domain.Interface.Application.Base;
+﻿using System.Transactions;
+using RestaurantAPI.Domain.Interface.Application.Base;
 using RestaurantAPI.Domain.Interface.Notification;
 
 namespace RestaurantAPI.Application.Application.Base
@@ -10,5 +11,6 @@ namespace RestaurantAPI.Application.Application.Base
         {
             _notification = notification;
         }
+        protected TransactionScope GetTransactionScopeAsyncEnabled() => new(TransactionScopeAsyncFlowOption.Enabled);
     }
 }

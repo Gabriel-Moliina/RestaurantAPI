@@ -1,7 +1,6 @@
 ﻿using System.Transactions;
 using FluentValidation;
 using RestaurantAPI.Application.Application.Base;
-using RestaurantAPI.Domain.DTO.Restaurant;
 using RestaurantAPI.Domain.DTO.Table;
 using RestaurantAPI.Domain.Interface.Application;
 using RestaurantAPI.Domain.Interface.Notification;
@@ -39,7 +38,7 @@ namespace RestaurantAPI.Application.Application
             _notification.AddNotifications(await _validatorTableCreate.ValidateAsync(dto));
             if (_notification.HasNotifications) return null;
 
-            using TransactionScope transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+            using TransactionScope transactionScope = GetTransactionScopeAsyncEnabled();
             var response = await _tableService.SaveOrUpdate(dto);
             transactionScope.Complete();
             return response;
@@ -49,7 +48,7 @@ namespace RestaurantAPI.Application.Application
             _notification.AddNotifications(await _validatorTableDelete.ValidateAsync(new TableDeleteDTO(id)));
             if (_notification.HasNotifications) return null;
 
-            using TransactionScope transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+            using TransactionScope transactionScope = GetTransactionScopeAsyncEnabled();
             var table = await _tableService.DeleteById(id);
             transactionScope.Complete();
             return table;
@@ -60,7 +59,7 @@ namespace RestaurantAPI.Application.Application
             _notification.AddNotifications(await _validatorTableChangeStatus.ValidateAsync(dto));
             if (_notification.HasNotifications) return false;
 
-            using TransactionScope transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+            using TransactionScope transactionScope = GetTransactionScopeAsyncEnabled();
             bool response = await _tableService.Release(dto);
 
             if(response) transactionScope.Complete();
