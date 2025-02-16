@@ -16,7 +16,7 @@ namespace RestaurantAPI.Infra.Repository
             await _dbSet.Where(e => e.Id == id).Include(e => e.Restaurant).FirstOrDefaultAsync();
 
         public async Task<List<Table>> GetByRestaurantId(long restaurantId) =>
-            await _dbSet.Where(e => e.RestaurantId == restaurantId).ToListAsync();
+            await _dbSet.Where(e => e.RestaurantId == restaurantId).Include(e => e.Reservation).ToListAsync();
 
         public async Task<Table> GetByIdentificationRestaurant(string identification, long restaurantId) =>
             await _dbSet.FirstOrDefaultAsync(e => e.Identification == identification && e.RestaurantId == restaurantId);

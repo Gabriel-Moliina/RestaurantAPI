@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using RestaurantAPI.Controllers.Base;
 using RestaurantAPI.Domain.DTO.Reservation;
-using RestaurantAPI.Domain.DTO.Table;
 using RestaurantAPI.Domain.Interface.Application;
 using RestaurantAPI.Domain.Interface.Notification;
 using RestaurantAPI.ViewModels;
@@ -21,14 +20,20 @@ namespace RestaurantAPI.Controllers
             _reservationApplication = reservationApplication;
         }
 
+        [HttpGet("{id}")]
+        public Task<ActionResult<ResponseApiViewModel<ReservationDTO>>> GetById(long id)
+        {
+            return Execute(async () => await _reservationApplication.GetById(id));
+        }
+
         [HttpPost]
-        public Task<ActionResult<ResponseApiViewModel<TableReservationResponseDTO>>> Create([FromBody] TableReservationDTO dto)
+        public Task<ActionResult<ResponseApiViewModel<CreateReservationResponseDTO>>> Create([FromBody] CreateReservationDTO dto)
         {
             return Execute(async () => await _reservationApplication.Create(dto));
         }
 
         [HttpDelete("{tableId}")]
-        public Task<ActionResult<ResponseApiViewModel<TableReservationResponseDTO>>> Cancel(long tableId)
+        public Task<ActionResult<ResponseApiViewModel<CreateReservationResponseDTO>>> Cancel(long tableId)
         {
             return Execute(async () => await _reservationApplication.Cancel(tableId));
         }

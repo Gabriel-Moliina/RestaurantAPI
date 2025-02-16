@@ -2,7 +2,6 @@
 using FluentValidation;
 using RestaurantAPI.Domain.DTO.Messaging;
 using RestaurantAPI.Domain.DTO.Reservation;
-using RestaurantAPI.Domain.DTO.Table;
 using RestaurantAPI.Domain.Interface.Application;
 using RestaurantAPI.Domain.Interface.Builder;
 using RestaurantAPI.Domain.Interface.Messaging;
@@ -14,7 +13,7 @@ namespace RestaurantAPI.Application.Application
     public class ReservationApplication : IReservationApplication
     {
         private readonly IRabbitMQSender _rabbitSender;
-        private readonly IValidator<TableReservationDTO> _validatorReservation;
+        private readonly IValidator<CreateReservationDTO> _validatorReservation;
         private readonly IValidator<TableCancelReservationDTO> _validatorCancelReservation;
         private readonly IReservationService _reservationService;
         private readonly INotification _notification;
@@ -22,7 +21,7 @@ namespace RestaurantAPI.Application.Application
         public ReservationApplication(IRabbitMQSender rabbitSender,
             IReservationService reservationService,
             INotification notification,
-            IValidator<TableReservationDTO> validatorReservation,
+            IValidator<CreateReservationDTO> validatorReservation,
             IValidator<TableCancelReservationDTO> validatorCancelTableReservation,
             IEmailBuilder emailBuilder
             )
@@ -35,7 +34,9 @@ namespace RestaurantAPI.Application.Application
             _emailBuilder = emailBuilder;
         }
 
-        public async Task<TableReservationResponseDTO> Create(TableReservationDTO dto)
+        public async Task<ReservationDTO> GetById(long id) => await _reservationService.GetById(id);
+
+        public async Task<CreateReservationResponseDTO> Create(CreateReservationDTO dto)
         {
             _notification.AddNotifications(await _validatorReservation.ValidateAsync(dto));
             if (_notification.HasNotifications) return null;
@@ -55,7 +56,7 @@ namespace RestaurantAPI.Application.Application
             return table;
         }
 
-        public async Task<TableReservationResponseDTO> Cancel(long tableId)
+        public async Task<CreateReservationResponseDTO> Cancel(long tableId)
         {
             _notification.AddNotifications(await _validatorCancelReservation.ValidateAsync(new TableCancelReservationDTO(tableId)));
             if (_notification.HasNotifications) return null;

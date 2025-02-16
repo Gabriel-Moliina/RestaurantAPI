@@ -10,8 +10,6 @@ namespace RestaurantAPI.Domain.Mapper
         {
             CreateMap<RestaurantSaveDTO, Restaurant>();
             CreateMap<Restaurant, RestaurantDTO>();
-            CreateMap<Restaurant, RestaurantDTO>()
-                .ForMember(x => x.Tables, y => y.MapFrom(x => x.Tables));
         }
     }
 }

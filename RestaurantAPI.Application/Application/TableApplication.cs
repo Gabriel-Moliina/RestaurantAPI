@@ -1,6 +1,7 @@
 ﻿using System.Transactions;
 using FluentValidation;
 using RestaurantAPI.Application.Application.Base;
+using RestaurantAPI.Domain.DTO.Restaurant;
 using RestaurantAPI.Domain.DTO.Table;
 using RestaurantAPI.Domain.Interface.Application;
 using RestaurantAPI.Domain.Interface.Notification;
@@ -12,16 +13,19 @@ namespace RestaurantAPI.Application.Application
     {
         private readonly IValidator<TableSaveDTO> _validatorTableCreate;
         private readonly IValidator<TableReleaseDTO> _validatorTableChangeStatus;
+        private readonly IValidator<TableDeleteDTO> _validatorTableDelete;
         private readonly ITableService _tableService;
         public TableApplication(INotification notification,
             ITableService tableService,
             IValidator<TableSaveDTO> validatorTableCreate,
-            IValidator<TableReleaseDTO> validatorTableChangeStatus
+            IValidator<TableReleaseDTO> validatorTableChangeStatus,
+            IValidator<TableDeleteDTO> validatorTableDelete
             ) : base(notification)
         {
             _tableService = tableService;
             _validatorTableCreate = validatorTableCreate;
             _validatorTableChangeStatus = validatorTableChangeStatus;
+            _validatorTableDelete = validatorTableDelete;
         }
 
         public async Task<TableDTO> GetById(long id) => await _tableService.GetById(id);
@@ -36,7 +40,16 @@ namespace RestaurantAPI.Application.Application
             transactionScope.Complete();
             return response;
         }
-        public async Task<TableDTO> DeleteById(long id) => await _tableService.DeleteById(id);
+        public async Task<TableDTO> DeleteById(long id) {
+
+            _notification.AddNotifications(await _validatorTableDelete.ValidateAsync(new TableDeleteDTO(id)));
+            if (_notification.HasNotifications) return null;
+
+            using TransactionScope transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
+            var table = await _tableService.DeleteById(id);
+            transactionScope.Complete();
+            return table;
+        } 
 
         public async Task<bool> Release(TableReleaseDTO dto)
         {
@@ -45,7 +58,8 @@ namespace RestaurantAPI.Application.Application
 
             using TransactionScope transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
             bool response = await _tableService.Release(dto);
-            transactionScope.Complete();
+
+            if(response) transactionScope.Complete();
             return response;
         }
     }

@@ -31,6 +31,7 @@ namespace RestaurantAPI.Domain.Validator.User
 
             RuleFor(a => new { a.Password, a.ConfirmPassword })
                 .Must(x => x.Password == x.ConfirmPassword)
+                .WithName("ConfirmPassword")
                 .WithMessage("As senhas devem coincidir");
         }
 

@@ -33,7 +33,7 @@ namespace RestaurantAPI.ServiceTests.Service
                 Name = "restaurante teste",
             };
 
-            _mockAutoMapper.Setup(c => c.Map<Restaurant>(null)).Returns((Restaurant)null);
+            _mockAutoMapper.Setup(c => c.Map<Restaurant>(restauranteCreate)).Returns((Restaurant)null);
             var restaurant = await _restaurantRervice.SaveOrUpdate(restauranteCreate);
 
             Assert.Null(restaurant);

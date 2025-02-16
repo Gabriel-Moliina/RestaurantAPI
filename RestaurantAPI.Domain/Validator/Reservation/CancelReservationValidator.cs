@@ -4,11 +4,11 @@ using RestaurantAPI.Domain.Interface.Repository;
 
 namespace RestaurantAPI.Domain.Validator.Table
 {
-    public class TableReservationCancelValidator : AbstractValidator<TableCancelReservationDTO>
+    public class CancelReservationValidator : AbstractValidator<TableCancelReservationDTO>
     {
         private readonly ITableRepository _tableRepository;
         private readonly IReservationRepository _reservationRepository;
-        public TableReservationCancelValidator(ITableRepository tableRepository,
+        public CancelReservationValidator(ITableRepository tableRepository,
             IReservationRepository reservationRepository)
         {
             _tableRepository = tableRepository;

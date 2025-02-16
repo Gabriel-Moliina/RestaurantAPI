@@ -9,6 +9,8 @@ namespace RestaurantAPI.Domain.Mapper
         public TableMapper()
         {
             CreateMap<Table, TableDTO>();
+            CreateMap<Table, TableDTO>()
+                .ForPath(x => x.ReservationId, y => y.MapFrom(x => x.Reservation.Id));
             CreateMap<Table, TableResponseDTO>();
             CreateMap<TableDTO, Table>();
             CreateMap<TableSaveDTO, Table>();

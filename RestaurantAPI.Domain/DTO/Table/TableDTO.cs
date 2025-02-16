@@ -6,6 +6,7 @@
         public string Identification { get; set; }
         public int Capacity { get; set; }
         public long RestaurantId { get; set; }
-        public long Reserved { get; set; }
+        public bool Reserved { get; set; }
+        public long ReservationId { get; set; }
     }
 }

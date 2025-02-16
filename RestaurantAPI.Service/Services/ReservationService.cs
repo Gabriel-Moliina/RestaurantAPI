@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using RestaurantAPI.Domain.DTO.Reservation;
-using RestaurantAPI.Domain.DTO.Table;
 using RestaurantAPI.Domain.Entities;
 using RestaurantAPI.Domain.Interface.Builder;
 using RestaurantAPI.Domain.Interface.Repository;
@@ -27,7 +26,9 @@ namespace RestaurantAPI.Service.Services
             _reservationRepository = reservationRepository;
         }
 
-        public async Task<TableReservationResponseDTO> Create(TableReservationDTO dto)
+        public async Task<ReservationDTO> GetById(long id) => _mapper.Map<ReservationDTO>(await _reservationRepository.GetById(id));
+
+        public async Task<CreateReservationResponseDTO> Create(CreateReservationDTO dto)
         {
             var table = await _tableRepository.GetById(dto.TableId);
             if (table == null) 
@@ -46,7 +47,7 @@ namespace RestaurantAPI.Service.Services
 
             await _reservationRepository.Add(reservation);
 
-            TableReservationResponseDTO response = _tableReservationResponseBuilder.
+            CreateReservationResponseDTO response = _tableReservationResponseBuilder.
                 WithDate(dto.Date).
                 WithEmail(dto.Email).
                 WithIdentification(table.Identification).
@@ -57,7 +58,7 @@ namespace RestaurantAPI.Service.Services
             return response;
         }
 
-        public async Task<TableReservationResponseDTO> Cancel(long tableId)
+        public async Task<CreateReservationResponseDTO> Cancel(long tableId)
         {
             var table = await _tableRepository.GetById(tableId);
             if(table == null) 
@@ -68,7 +69,7 @@ namespace RestaurantAPI.Service.Services
                 return null;
 
             table.Reserved = false;
-            TableReservationResponseDTO reseponse = _tableReservationResponseBuilder.
+            CreateReservationResponseDTO reseponse = _tableReservationResponseBuilder.
                 WithDate(reservation.Date).
                 WithEmail(reservation.Email).
                 WithIdentification(table.Identification).

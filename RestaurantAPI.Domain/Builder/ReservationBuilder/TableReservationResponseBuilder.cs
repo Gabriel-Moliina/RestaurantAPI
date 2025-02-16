@@ -1,14 +1,14 @@
-﻿using RestaurantAPI.Domain.DTO.Table;
+﻿using RestaurantAPI.Domain.DTO.Reservation;
 using RestaurantAPI.Domain.Interface.Builder;
 
 namespace RestaurantAPI.Domain.Builder.ReservationBuilder
 {
     public class TableReservationResponseBuilder : ITableReservationResponseBuilder
     {
-        private readonly TableReservationResponseDTO _tableReservation;
+        private readonly CreateReservationResponseDTO _tableReservation;
         public TableReservationResponseBuilder()
         {
-            _tableReservation = new TableReservationResponseDTO();
+            _tableReservation = new CreateReservationResponseDTO();
         }
 
         public ITableReservationResponseBuilder WithRestaurantName(string restaurantName)
@@ -36,7 +36,7 @@ namespace RestaurantAPI.Domain.Builder.ReservationBuilder
             _tableReservation.Reserved = reserved;
             return this;
         }
-        public TableReservationResponseDTO Build()
+        public CreateReservationResponseDTO Build()
         {
             return _tableReservation;
         }

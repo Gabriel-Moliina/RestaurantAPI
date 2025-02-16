@@ -2,12 +2,12 @@
 using RestaurantAPI.Domain.DTO.Reservation;
 using RestaurantAPI.Domain.Interface.Repository;
 
-namespace RestaurantAPI.Domain.Validator.Table
+namespace RestaurantAPI.Domain.Validator.Reservation
 {
-    public class TableReservationValidator : AbstractValidator<TableReservationDTO>
+    public class CreateReservationValidator : AbstractValidator<CreateReservationDTO>
     {
         private readonly ITableRepository _tableRepository;
-        public TableReservationValidator(ITableRepository tableRepository)
+        public CreateReservationValidator(ITableRepository tableRepository)
         {
             _tableRepository = tableRepository;
 

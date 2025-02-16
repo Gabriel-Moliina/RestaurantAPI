@@ -9,16 +9,27 @@ namespace RestaurantAPI.Domain.Validator.Table
     {
         private readonly ITableRepository _tableRepository;
         private readonly IRestaurantRepository _restaurantRepository;
+        private readonly IReservationRepository _reservationRepository;
         public TableSaveValidator(ITableRepository tableRepository,
-            IRestaurantRepository restaurantRepository)
+            IRestaurantRepository restaurantRepository,
+            IReservationRepository reservationRepository)
         {
             _tableRepository = tableRepository;
             _restaurantRepository = restaurantRepository;
+            _reservationRepository = reservationRepository;
 
             RuleFor(a => a.Identification)
                 .NotEmpty()
-                .WithName("Identificação")
+                .WithName("Identification")
                 .WithMessage("Identificação da mesa não pode ser vazia");
+
+            RuleFor(a => a.Id)
+                .MustAsync(async (model, id, cancellationToken) =>
+                {
+                    return !await _reservationRepository.ExistByTableId(id);
+                })
+                .WithName("Reservation")
+                .WithMessage("Mesa reservada, cancele a reserva ou libere a mesa antes de alterá-la");
 
             When(a => a.Id == 0, () =>
             {
@@ -27,7 +38,7 @@ namespace RestaurantAPI.Domain.Validator.Table
                 {
                     return await _tableRepository.GetByIdentificationRestaurant(model.Identification, model.RestaurantId) == null;
                 })
-                .WithName("Identificação")
+                .WithName("Identification")
                 .WithMessage("Mesa já existente");
             });
             
@@ -40,11 +51,9 @@ namespace RestaurantAPI.Domain.Validator.Table
 
                     return tableExists;
                 })
-                .WithName("Identificação")
+                .WithName("Identification")
                 .WithMessage("Mesa já existente");
             });
-
-
 
             RuleFor(a => a.RestaurantId)
                 .MustAsync(async (restaurantId, cancellationToken) =>

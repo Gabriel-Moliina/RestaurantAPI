@@ -11,7 +11,8 @@ namespace RestaurantAPI.Infra.Repository
         public ReservationRepository(EntityContext context) : base(context)
         {
         }
-
+        public override async Task<Reservation> GetById(long id) => await _dbSet.Where(e => e.Id == id).Include(e => e.Table).FirstOrDefaultAsync();
         public async Task<Reservation> GetByTableId(long tableId) => await _dbSet.FirstOrDefaultAsync(e => e.TableId == tableId);
+        public async Task<bool> ExistByTableId(long tableId) => await _dbSet.AnyAsync(e => e.TableId == tableId);
     }
 }

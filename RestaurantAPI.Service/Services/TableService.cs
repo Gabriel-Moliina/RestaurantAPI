@@ -23,25 +23,36 @@ namespace RestaurantAPI.Service.Services
         public async Task<List<TableDTO>> GetByRestaurantId(long restaurantId) => _mapper.Map<List<TableDTO>>(await _tableRepository.GetByRestaurantId(restaurantId));
         public async Task<TableResponseDTO> SaveOrUpdate(TableSaveDTO dto)
         {
-            var table = _mapper.Map<Table>(dto);
-            if (table == null)
+            if (dto == null)
                 return null;
 
+            Table response;
             if (dto.Id == 0)
-                await _tableRepository.Add(table);
+            {
+                var table = _mapper.Map<Table>(dto);
+                response = await _tableRepository.Add(table);
+            }
             else
-                await _tableRepository.Update(table);
+            {
+                var entity = await _tableRepository.GetById(dto.Id);
+                entity.Capacity = dto.Capacity;
+                entity.Identification = dto.Identification;
 
-            return _mapper.Map<TableResponseDTO>(table);
+                response = await _tableRepository.Update(entity);
+            }
+
+            return _mapper.Map<TableResponseDTO>(response);
         }
         public async Task<TableDTO> DeleteById(long id) => _mapper.Map<TableDTO>(await _tableRepository.DeleteById(id));
         public async Task<bool> Release(TableReleaseDTO dto)
         {
             var table = await _tableRepository.GetById(dto.TableId);
+            if (table == null) return false;
             table.Reserved = false;
             await _tableRepository.Update(table);
 
             var reservation = await _reservationRepository.GetByTableId(table.Id);
+            if (reservation == null) return false;
             await _reservationRepository.Delete(reservation);
 
             return true;

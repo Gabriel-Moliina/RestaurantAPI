@@ -6,6 +6,5 @@ namespace RestaurantAPI.Domain.DTO.Restaurant
     {
         public long Id { get; set; }
         public string Name { get; set; }
-        public List<TableDTO> Tables { get; set; }
     }
 }

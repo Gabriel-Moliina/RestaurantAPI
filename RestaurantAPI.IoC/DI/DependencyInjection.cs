@@ -23,6 +23,7 @@ using RestaurantAPI.Domain.Interface.Services;
 using RestaurantAPI.Domain.Interface.Token;
 using RestaurantAPI.Domain.Mapper;
 using RestaurantAPI.Domain.Notification;
+using RestaurantAPI.Domain.Validator.Reservation;
 using RestaurantAPI.Domain.Validator.Restaurant;
 using RestaurantAPI.Domain.Validator.Table;
 using RestaurantAPI.Domain.Validator.User;
@@ -93,9 +94,10 @@ namespace RestaurantAPI.IoC
             services.AddScoped<IValidator<RestaurantSaveDTO>, RestaurantSaveValidator>();
             services.AddScoped<IValidator<RestaurantDeleteDTO>, RestaurantDeleteValidator>();
             services.AddScoped<IValidator<TableSaveDTO>, TableSaveValidator>();
-            services.AddScoped<IValidator<TableReservationDTO>, TableReservationValidator>();
-            services.AddScoped<IValidator<TableCancelReservationDTO>, TableReservationCancelValidator>();
+            services.AddScoped<IValidator<CreateReservationDTO>, CreateReservationValidator>();
+            services.AddScoped<IValidator<TableCancelReservationDTO>, CancelReservationValidator>();
             services.AddScoped<IValidator<TableReleaseDTO>, TableReleaseValidator>();
+            services.AddScoped<IValidator<TableDeleteDTO>, TableDeleteValidator>();
             return services;
         }
 
@@ -109,6 +111,7 @@ namespace RestaurantAPI.IoC
             services.AddAutoMapper(typeof(UserMapper));
             services.AddAutoMapper(typeof(RestaurantMapper));
             services.AddAutoMapper(typeof(TableMapper));
+            services.AddAutoMapper(typeof(ReservationMapper));
             return services;
         }
 
