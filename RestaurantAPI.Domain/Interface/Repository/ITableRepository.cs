@@ -7,8 +7,8 @@ namespace RestaurantAPI.Domain.Interface.Repository
     {
         Task<Table> GetByIdAndUserId(long id, long userId);
         Task<List<Table>> GetByRestaurantIdAndUserId(long restaurantId, long userId);
-        Task<Table> GetByIdentificationRestaurantAndUserId(string identification, long restaurantId, long userId);
-        Task<Table> GetByIdentificationRestaurantWithDiffIdAndUserId(string identification, long restaurantId, long tableId, long userId);
+        Task<bool> ExistsByIdentificationRestaurantAndUserId(string identification, long restaurantId, long userId);
+        Task<bool> ExistsByIdentificationRestaurantAndUserIdWithDiffId(string identification, long restaurantId, long tableId, long userId);
         Task<bool> ExistsByIdAndUserId(long id, long userId);
         Task<bool> ExistsByIdAndUserId(long id, long restaurantId, long userId);
     }

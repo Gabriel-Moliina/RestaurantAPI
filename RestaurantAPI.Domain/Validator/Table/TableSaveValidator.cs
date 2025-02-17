@@ -39,7 +39,7 @@ namespace RestaurantAPI.Domain.Validator.Table
                 RuleFor(a => a.Identification)
                 .MustAsync(async (model, identification, cancellationToken) =>
                 {
-                    return await _tableRepository.GetByIdentificationRestaurantAndUserId(model.Identification, model.RestaurantId, _tokenService.GetUserId) == null;
+                    return !await _tableRepository.ExistsByIdentificationRestaurantAndUserId(model.Identification, model.RestaurantId, _tokenService.GetUserId);
                 })
                 .WithName("Identification")
                 .WithMessage("Mesa já existente");
@@ -50,9 +50,7 @@ namespace RestaurantAPI.Domain.Validator.Table
                 RuleFor(a => a.Identification)
                 .MustAsync(async (model, identification, cancellationToken) =>
                 {
-                    var tableExists = await _tableRepository.GetByIdentificationRestaurantWithDiffIdAndUserId(model.Identification, model.RestaurantId, model.Id, _tokenService.GetUserId) == null;
-
-                    return tableExists;
+                    return !await _tableRepository.ExistsByIdentificationRestaurantAndUserIdWithDiffId(model.Identification, model.RestaurantId, model.Id, _tokenService.GetUserId);
                 })
                 .WithName("Identification")
                 .WithMessage("Mesa já existente")
