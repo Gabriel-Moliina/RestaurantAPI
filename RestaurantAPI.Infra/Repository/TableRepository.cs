@@ -22,10 +22,10 @@ namespace RestaurantAPI.Infra.Repository
             await _dbSet.Where(e => e.RestaurantId == restaurantId && e.Restaurant.UserId == userId).Include(e => e.Reservation).ToListAsync();
 
         public async Task<Table> GetByIdentificationRestaurantAndUserId(string identification, long restaurantId, long userId) =>
-            await _dbSet.FirstOrDefaultAsync(e => e.Identification == identification && e.RestaurantId == restaurantId && e.Restaurant.UserId == userId);
+            await _dbSet.FirstOrDefaultAsync(e => e.Identification.Trim() == identification.Trim() && e.RestaurantId == restaurantId && e.Restaurant.UserId == userId);
         
         public async Task<Table> GetByIdentificationRestaurantWithDiffIdAndUserId(string identification, long restaurantId, long tableId, long userId) =>
-            await _dbSet.FirstOrDefaultAsync(e => e.Identification == identification && e.RestaurantId == restaurantId && e.Id != tableId && e.Restaurant.UserId == userId);
+            await _dbSet.FirstOrDefaultAsync(e => e.Identification.Trim() == identification.Trim() && e.RestaurantId == restaurantId && e.Id != tableId && e.Restaurant.UserId == userId);
 
         public async Task<bool> ExistsByIdAndUserId(long id, long userId) => await _dbSet.AnyAsync(e => e.Id == id && e.Restaurant.UserId == userId);
         public async Task<bool> ExistsByIdAndUserId(long id, long restaurantId, long userId) => await _dbSet.AnyAsync(e => e.Id == id && e.RestaurantId == restaurantId && e.Restaurant.UserId == userId);
