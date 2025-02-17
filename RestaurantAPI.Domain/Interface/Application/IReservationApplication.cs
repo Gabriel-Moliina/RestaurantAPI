@@ -6,6 +6,6 @@ namespace RestaurantAPI.Domain.Interface.Application
     {
         Task<ReservationDTO> GetById(long id);
         Task<CreateReservationResponseDTO> Create(CreateReservationDTO dto);
-        Task<CreateReservationResponseDTO> Cancel(long tableId);
+        Task<CreateReservationResponseDTO> Cancel(long reservationId);
     }
 }

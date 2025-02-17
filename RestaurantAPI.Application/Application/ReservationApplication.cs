@@ -62,13 +62,13 @@ namespace RestaurantAPI.Application.Application
             return table;
         }
 
-        public async Task<CreateReservationResponseDTO> Cancel(long tableId)
+        public async Task<CreateReservationResponseDTO> Cancel(long id)
         {
-            _notification.AddNotifications(await _validatorCancelReservation.ValidateAsync(new TableCancelReservationDTO(tableId)));
+            _notification.AddNotifications(await _validatorCancelReservation.ValidateAsync(new TableCancelReservationDTO(id)));
             if (_notification.HasNotifications) return null;
 
             using TransactionScope transactionScope = new(TransactionScopeAsyncFlowOption.Enabled);
-            var table = await _reservationService.Cancel(tableId);
+            var table = await _reservationService.Cancel(id);
             transactionScope.Complete();
 
             var dateLocal = TimeZoneInfo.ConvertTimeFromUtc(table.Date, TimeZoneInfo.Local).ToLocalTime();

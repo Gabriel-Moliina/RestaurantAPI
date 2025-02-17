@@ -2,10 +2,10 @@
 {
     public class TableCancelReservationDTO
     {
-        public TableCancelReservationDTO(long tableId)
+        public TableCancelReservationDTO(long id)
         {
-            TableId = tableId;
+            Id = id;
         }
-        public long TableId { get; }
+        public long Id { get; }
     }
 }

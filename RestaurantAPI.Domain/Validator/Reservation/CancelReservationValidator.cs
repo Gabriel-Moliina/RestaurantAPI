@@ -7,27 +7,19 @@ namespace RestaurantAPI.Domain.Validator.Table
 {
     public class CancelReservationValidator : AbstractValidator<TableCancelReservationDTO>
     {
-        private readonly ITableRepository _tableRepository;
         private readonly IReservationRepository _reservationRepository;
         private readonly ITokenService _tokenService;
-        public CancelReservationValidator(ITableRepository tableRepository,
-            IReservationRepository reservationRepository,
+        public CancelReservationValidator(IReservationRepository reservationRepository,
             ITokenService tokenService
             )
         {
-            _tableRepository = tableRepository;
             _reservationRepository = reservationRepository;
             _tokenService = tokenService;
 
-            RuleFor(a => a.TableId)
-                .MustAsync(async (tableId, cancellationToken) =>
+            RuleFor(a => a.Id)
+                .MustAsync(async (id, cancellationToken) =>
                 {
-                    return await _tableRepository.ExistsByIdAndUserId(tableId, _tokenService.GetUserId);
-                })
-                .WithMessage("Mesa não encontrada")
-                .MustAsync(async (tableId, cancellationToken) =>
-                {
-                    var reservation = await _reservationRepository.GetByTableIdAndUserId(tableId, _tokenService.GetUserId);
+                    var reservation = await _reservationRepository.GetByIdAndUserId(id, _tokenService.GetUserId);
                     return reservation != null;
                 })
                 .WithMessage("Nenhuma reserva encontrada para esta mesa");
