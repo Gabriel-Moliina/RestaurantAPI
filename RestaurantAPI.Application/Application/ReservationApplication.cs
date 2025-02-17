@@ -1,5 +1,6 @@
 ﻿using System.Transactions;
 using FluentValidation;
+using RestaurantAPI.Application.Application.Base;
 using RestaurantAPI.Domain.DTO.Messaging;
 using RestaurantAPI.Domain.DTO.Reservation;
 using RestaurantAPI.Domain.Interface.Application;
@@ -11,13 +12,12 @@ using RestaurantAPI.Domain.Interface.Token;
 
 namespace RestaurantAPI.Application.Application
 {
-    public class ReservationApplication : IReservationApplication
+    public class ReservationApplication : BaseApplication, IReservationApplication
     {
         private readonly IRabbitMQSender _rabbitSender;
         private readonly IValidator<CreateReservationDTO> _validatorReservation;
         private readonly IValidator<TableCancelReservationDTO> _validatorCancelReservation;
         private readonly IReservationService _reservationService;
-        private readonly INotification _notification;
         private readonly IEmailBuilder _emailBuilder;
         private readonly ITokenService _tokenService;
         public ReservationApplication(IRabbitMQSender rabbitSender,
@@ -27,13 +27,12 @@ namespace RestaurantAPI.Application.Application
             IValidator<TableCancelReservationDTO> validatorCancelTableReservation,
             ITokenService tokenService,
             IEmailBuilder emailBuilder
-            )
+            ) : base(notification)
         {
             _rabbitSender = rabbitSender;
             _reservationService = reservationService;
             _validatorReservation = validatorReservation;
             _validatorCancelReservation = validatorCancelTableReservation;
-            _notification = notification;
             _emailBuilder = emailBuilder;
             _tokenService = tokenService;
         }
@@ -45,7 +44,7 @@ namespace RestaurantAPI.Application.Application
             _notification.AddNotifications(await _validatorReservation.ValidateAsync(dto));
             if (_notification.HasNotifications) return null;
 
-            using TransactionScope transactionScope = new(TransactionScopeAsyncFlowOption.Enabled);
+            using TransactionScope transactionScope = GetTransactionScopeAsyncEnabled();
             var table = await _reservationService.Create(dto);
             transactionScope.Complete();
 
@@ -67,7 +66,7 @@ namespace RestaurantAPI.Application.Application
             _notification.AddNotifications(await _validatorCancelReservation.ValidateAsync(new TableCancelReservationDTO(id)));
             if (_notification.HasNotifications) return null;
 
-            using TransactionScope transactionScope = new(TransactionScopeAsyncFlowOption.Enabled);
+            using TransactionScope transactionScope = GetTransactionScopeAsyncEnabled();
             var table = await _reservationService.Cancel(id);
             transactionScope.Complete();
 
